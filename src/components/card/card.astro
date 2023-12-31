@@ -1,0 +1,28 @@
+---
+const { header, body } = Astro.props;
+---
+
+<div class="card-container">
+  <div class="header">
+    <span>{header}</span>
+  </div>
+  <div class="body">
+    <article>{body}</article>
+</div>
+<style>
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    height: 100%;    
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    padding: 1rem;
+  }
+  .header {
+    font-size: 1.25rem;
+  }
+  .body {
+    overflow: auto;
+  }
+</style>
