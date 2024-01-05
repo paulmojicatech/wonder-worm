@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Card from '../components/card/card.astro';
+import {Image} from 'astro:assets';
+import logo from '../../public/images/wonderworm.png';
 
 const mathCard = {
 	header: 'Math',
@@ -30,7 +32,7 @@ const cardCollection = [mathCard, readingCard, skillsCard];
 	</head>
 	<body>
 		<h1>WonderWorm</h1>
-		<img src="images/wonderworm.png" alt="WonderWorm">
+		<Image width={50} src={logo} alt="WonderWorm Logo" />
 		<article>
 			Welcome to WonderWorm, a place where learning is an exciting journey full of wonder and exploration!
 		</article>
@@ -42,10 +44,7 @@ const cardCollection = [mathCard, readingCard, skillsCard];
 			))}
 		</section>
 	</body>
-	<style>
-		img {
-			width: 4rem;
-		}
+	<style>		
 		.cards {
 			display: flex;
 			flex-wrap: wrap;
