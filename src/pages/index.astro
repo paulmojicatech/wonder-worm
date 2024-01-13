@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Card from '../components/card/card.astro';
 import {Image} from 'astro:assets';
 import logo from '../../public/images/wonderworm.png';
+import Nav from '../components/nav/nav.astro';
 
 const mathCard = {
 	header: 'Math',
@@ -31,20 +32,49 @@ const cardCollection = [mathCard, readingCard, skillsCard];
 		<link rel="icon" type="image/x-icon" href="images/wonderworm.png">
 	</head>
 	<body>
-		<h1>WonderWorm</h1>
-		<Image width={50} src={logo} alt="WonderWorm Logo" />
-		<article>
-			Welcome to WonderWorm, a place where learning is an exciting journey full of wonder and exploration!
-		</article>
-		<section class="cards">
-			{cardCollection.map(card => (
-				<div class="card-container">
-						<Card body={card.body} header={card.header} />
-					</div>
-			))}
-		</section>
+		<header>
+			<h1>WonderWorm</h1>
+		</header>	
+		<div class="main-container">
+			<div class="nav-container">
+				<Nav />
+			</div>			
+			<div class="content-container">
+				<Image width={50} src={logo} alt="WonderWorm Logo" />
+				<article>
+					Welcome to WonderWorm, a place where learning is an exciting journey full of wonder and exploration!
+				</article>
+				<section class="cards">
+					{cardCollection.map(card => (
+						<div class="card-container">
+								<Card body={card.body} header={card.header} />
+							</div>
+					))}
+				</section>
+			</div>			
+		</div>		
 	</body>
 	<style>		
+		body {
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+		h1 {
+			margin-top: 0;
+			padding-top: 1rem;
+		}
+		header {
+			height: 5rem;
+		}
+		.main-container {
+			display: inline-flex;			
+			width: 100%;
+			height: calc(100% - 5rem);
+		}
+	
 		.cards {
 			display: flex;
 			flex-wrap: wrap;
