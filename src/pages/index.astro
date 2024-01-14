@@ -4,6 +4,8 @@ import Card from '../components/card/card.astro';
 import {Image} from 'astro:assets';
 import logo from '../../public/images/wonderworm.png';
 import Nav from '../components/nav/nav.astro';
+import '@fontsource/silkscreen';
+import '@fontsource-variable/montserrat';
 
 const mathCard = {
 	header: 'Math',
@@ -87,6 +89,9 @@ const cardCollection = [mathCard, readingCard, skillsCard];
 		}
 		h1, img, article {
 			margin-left: 1rem;
+		}
+		h1 {
+			font-family: 'Silkscreen', sans-serif;
 		}
 	</style>
 </html>

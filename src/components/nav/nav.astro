@@ -1,14 +1,21 @@
+---
+import {Image} from 'astro:assets';
+import account_profile from '../../../public/images/icons/account_circle.svg';
+---
 <div class="nav-container">
   <a>Home</a>
-
+<Image src={account_profile} width={35} alt="Profile" />
 </div>
 <style>
+  * {
+    box-sizing: border-box;
+  }
   .nav-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     background-color: #f2f2f2;
-    padding: 0 1rem;
+    padding: 1rem;
   }
   a {
     text-decoration: none;
