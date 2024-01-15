@@ -3,19 +3,39 @@ import {Image} from 'astro:assets';
 import account_profile from '../../../public/images/icons/account_circle.svg';
 ---
 <div class="nav-container">
-  <a>Home</a>
-<Image src={account_profile} width={35} alt="Profile" />
+  <div class="main-nav-items">
+    <a>Home</a>
+    <a>Math</a>
+    <a>Reading</a>
+    <a>Skills</a>
+  </div>
+  <div class="account">
+    <Image src={account_profile} width={35} alt="Profile" />
+  </div>  
 </div>
 <style>  
   .nav-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: 100%;
     background-color: #f2f2f2;
     padding: 1rem;
   }
+  .main-nav-items {
+    display: flex;
+    flex-direction: column;    
+  }
+  .account {
+    display: flex;
+    justify-content: center;
+  }
   a {
     text-decoration: none;
     color: #2d2d2d;
+    padding: .5rem 0;
+  }
+  :first-of-type a{
+    padding-top: 0;
   }
 </style>
