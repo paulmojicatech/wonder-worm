@@ -6,3 +6,12 @@ body {
   padding: 0;
   font-family: 'Monterrat Variable', sans-serif;
 }
+
+body.dark {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+body.light {
+  background-color: #fff;
+  color: #1a1a1a;
+}
