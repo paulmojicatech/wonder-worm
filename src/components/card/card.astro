@@ -10,6 +10,12 @@ const { header, body } = Astro.props;
     <article>{body}</article>
 </div>
 <style>
+  body.dark {
+    .card-container {
+      background-color: #4a4946;
+      border-radius: 5px;
+    }
+  }
   .card-container {
     display: flex;
     flex-direction: column;
