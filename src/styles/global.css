@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 body {
+  width: 100vw;
+  height: calc(100vh - 3rem);
+  position: absolute;
+  left: 0;
+  top: 0;
   margin: 0;
   padding: 0;
   font-family: 'Monterrat Variable', sans-serif;
@@ -14,4 +19,62 @@ body.dark {
 body.light {
   background-color: #fff;
   color: #1a1a1a;
+}
+
+header {
+  display: flex;
+  height: 5rem;
+  align-items: center;
+}
+.header-container {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 50px);
+  margin-left: 1rem;
+}
+.content-container {
+  overflow-y: auto;
+}
+.theme-toggle {
+  margin-right: 1rem;
+}
+h1 {
+  margin-top: 0;
+  padding-top: 1rem;
+  font-size: 1.5rem;
+}
+@media screen and (min-width: 768px) {
+  body {
+    height: 100vh;
+  }
+  h1 {
+    font-size: 2rem;
+  }			
+}
+.main-container {
+  display: inline-flex;			
+  width: 100%;
+  height: calc(100% - 5rem);
+  overflow-y: hidden;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  justify-content: center;
+  width: 100%;
+}
+.card-container {
+  margin: 1rem;
+}
+h1, img, article {
+  margin-left: 1rem;
+}
+h1 {
+  font-family: 'Silkscreen', sans-serif;
+}
+.main-content {
+  margin-top: 1rem;
 }
