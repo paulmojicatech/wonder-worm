@@ -19,11 +19,18 @@ const { header, body } = Astro.props;
   .card-container {
     display: flex;
     flex-direction: column;
-    width: 20rem;
+    width: 15rem;
     height: 100%;    
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     padding: 1rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    .card-container {
+      width: 20rem;
+    
+    }
   }
   .header {
     font-size: 1.25rem;
