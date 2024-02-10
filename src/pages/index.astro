@@ -69,6 +69,24 @@ const mainContent = `Learning holds immense significance for the overall develop
 		</div>		
 	</body>	
 	<style>		
-		
+		.cards {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 2rem;
+			justify-content: center;
+			width: 100%;
+		}
+		.card-container {
+			margin: 1rem;
+		}
+		Card {
+			width: 95%;
+		}
+		@media screen and (min-width: 768px) {
+			Card {
+				width: unset;
+			}
+			
+		}
 	</style>
 </html>
