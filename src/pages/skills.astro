@@ -34,4 +34,13 @@ import '../styles/global.css';
 			</div>			
 		</div>		
 	</body>	
+  <script>
+    import { getCurrentUser } from '../utils/auth';
+    window.addEventListener('DOMContentLoaded', () => {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        window.location.href = '/register';
+      }      
+    });
+  </script>
 </html>

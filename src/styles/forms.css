@@ -4,8 +4,30 @@ input[type="text"], input[type="password"], input[type="email"] {
   height: 2rem;
   padding: 0.5rem;
   border-radius: 5px;
-  border: 1px solid #d1cfcf;
+  border: solid 1px #d1cfcf;
 }
 input:user-invalid {
-  border: 1px solid red;
+  border: solid 2px red;
+}
+.error {
+  color: red;
+}
+button.primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+button.link {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
