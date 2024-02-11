@@ -1,3 +1,7 @@
+@import './dark.css' layer(dark);
+@import './light.css' layer(light);
+@import './forms.css' layer(forms);
+
 * {
   box-sizing: border-box;
 }
@@ -10,15 +14,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Monterrat Variable', sans-serif;
-}
-
-body.dark {
-  background-color: #292c35;
-  color: #fff;
-}
-body.light {
-  background-color: #fff;
-  color: #1a1a1a;
+  color: var(--color);
+  background-color: var(--background-color);
 }
 
 header {

@@ -1,0 +1,6 @@
+@layer dark;
+
+body.dark {
+  --color: #fff;
+  --background-color: #292c35;
+}

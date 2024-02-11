@@ -1,0 +1,6 @@
+@layer light;
+
+body.light {
+  --color: #1a1a1a;
+  --background-color: #fff;
+}
