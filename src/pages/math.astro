@@ -15,7 +15,7 @@ import '../styles/global.css';
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/x-icon" href="images/wonderworm.png">
 	</head>
-	<body>
+	<body>  
 		<header>
 			<Image width={50} src={logo} alt="WonderWorm Logo" />
 			<div class="header-container">
@@ -29,9 +29,18 @@ import '../styles/global.css';
 			<div class="nav-container">
 				<Nav />
 			</div>			
-			<div class="content-container">				
-				Coming Soon!
+			<div class="content-container">        
+        <span>Coming Soon!</span>        
 			</div>			
 		</div>		
-	</body>	
+	</body>	  
+  <script>
+    import { getCurrentUser } from '../utils/auth';
+    window.addEventListener('DOMContentLoaded', () => {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        window.location.href = '/register';
+      }      
+    });
+  </script>
 </html>
