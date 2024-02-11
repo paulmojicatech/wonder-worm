@@ -28,9 +28,28 @@ import '@fontsource-variable/montserrat';
 			<div class="nav-container">
 				<Nav />
 			</div>			
-			<div class="content-container">	
-        Test
+			<div class="content-container">
+        <h2>Register to start learning!</h2>        
+        <fieldset>
+          <div class="form-container">            
+            <label for="parentName">Parent Name:*</label>
+            <input type="text" id="parentName" name="parentName" required/>                           
+            <label for="email">Email:*</label>
+            <input type="email" id="email" name="email" required/>                        
+            <label for="username">User Name:*</label>
+            <input type="text" id="username" name="username" required/>                        
+            <label for="password">Password:*</label>
+            <input type="password" id="password" name="password" required/>            
+          </div>        
+        </fieldset>        
       </div>
     </div>
   </body>
+  <style>
+    .form-container {
+      display: flex;
+      flex-direction: column;      
+      gap: .5rem; 
+    }
+  </style>
 </html>

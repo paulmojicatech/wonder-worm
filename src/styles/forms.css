@@ -1,0 +1,11 @@
+@layer forms;
+
+input[type="text"], input[type="password"], input[type="email"] {
+  height: 2rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #d1cfcf;
+}
+input:user-invalid {
+  border: 1px solid red;
+}
