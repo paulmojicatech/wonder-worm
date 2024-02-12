@@ -33,14 +33,5 @@ import '../styles/global.css';
         <span>Coming Soon!</span>        
 			</div>			
 		</div>		
-	</body>	  
-  <script>
-    import { getCurrentUser } from '../utils/auth';
-    window.addEventListener('DOMContentLoaded', () => {
-      const currentUser = getCurrentUser();
-      if (!currentUser) {
-        window.location.href = '/register';
-      }      
-    });
-  </script>
+	</body>	    
 </html>

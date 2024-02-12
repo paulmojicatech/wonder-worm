@@ -29,19 +29,32 @@ import '@fontsource-variable/montserrat';
 				<Nav />
 			</div>			
 			<div class="content-container">
-        <h2>Register to start learning!</h2>        
-        <fieldset>
-          <div class="form-container">            
-            <label for="parentName">Parent Name:*</label>
-            <input type="text" id="parentName" name="parentName" required/>                           
-            <label for="email">Email:*</label>
-            <input type="email" id="email" name="email" required/>                        
-            <label for="username">User Name:*</label>
-            <input type="text" id="username" name="username" required/>                        
-            <label for="password">Password:*</label>
-            <input type="password" id="password" name="password" required/>            
-          </div>        
-        </fieldset>        
+        <h2>Register to start learning!</h2>
+        <form action="" method="post" id="register-form">
+          <fieldset>
+            <div class="form-container">            
+              <label for="parentName">Parent Name:*</label>
+              <input type="text" id="parentName" name="parentName" required/>                           
+              <label for="email">Email:*</label>
+              <input type="email" id="email" name="email" required/>                        
+              <label for="username">User Name:*</label>
+              <input type="text" id="username" name="username" required/>
+              <label for="birthday">Birthday(mm/dd/yyyy):*</label>
+              <input type="text" id="birthday" name="birthday" required/>
+              <div id="birthday-error" class="error hide"></div>
+              <label for="password">Password:*</label>
+              <input type="password" id="password" name="password" required/>              
+              <label for="confirmPassword">Confirm Password:*</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" required/>      
+              <div id="error-section" class="error hide">
+              </div>
+            </div>        
+          </fieldset>
+          <div class="actions">
+            <button disabled id="registerBtn" class="primary" type="submit">Register</button>
+            <span>Already have an account? <a href="/login">Login</a></span>
+          </div>                    
+        </form>         
       </div>
     </div>
   </body>
@@ -50,6 +63,94 @@ import '@fontsource-variable/montserrat';
       display: flex;
       flex-direction: column;      
       gap: .5rem; 
+      width: 20rem;
+      flex-wrap: wrap;
+    }
+    .hide {
+      display: none;
+    }
+    .actions {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .actions > span {
+      margin-top: .25rem;
     }
   </style>
+  <script>
+    import {fromEvent, takeUntil, Subject, merge} from 'rxjs';
+    const onDesstroySub$ = new Subject<void>();
+    window.addEventListener('beforeunload', () => {      
+      onDesstroySub$.next();
+    });
+
+    // birthday validation
+    const birthdayEl = document.querySelector('#birthday') as HTMLInputElement;
+    const birthdayErrorEl = document.querySelector('#birthday-error') as HTMLDivElement;    
+    const passwordEl = document.querySelector('#password') as HTMLInputElement;
+    const confirmPasswordEl = document.querySelector('#confirmPassword') as HTMLInputElement;
+    const errorSection = document.querySelector('#error-section') as HTMLDivElement;
+    
+    // form validation
+    const formEl = document.querySelector('form') as HTMLFormElement;
+    const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;
+
+    fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {
+      validateBirthdayInput(birthdayEl, birthdayErrorEl);
+      validatePasswordInputs(passwordEl, confirmPasswordEl, errorSection);    
+      const isValid = formEl.checkValidity();
+      if (isValid) {
+        registerBtn.disabled = false;
+      } else {
+        registerBtn.disabled = true;
+      }
+    });
+
+    function validatePasswordInputs(passwordEl: HTMLInputElement, confirmPasswordEl: HTMLInputElement, errorSectionEl: HTMLDivElement): void {
+      const password = passwordEl.value;
+      const confirmPassword = confirmPasswordEl.value;
+      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+      const isConfirmValid = password === confirmPassword;
+      
+      let errorMessage = '';
+      const isValid = pattern.test(password) && isConfirmValid;
+      if (!isValid) {
+        if (!pattern.test(password)) {          
+          errorSection.classList.remove('hide');
+          errorMessage = 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number';
+          passwordEl.setCustomValidity(errorMessage);
+          errorSection.innerHTML = errorMessage;          
+        } else if (!isConfirmValid) {
+          errorSection.classList.remove('hide');
+          errorMessage = 'Passwords do not match';
+          confirmPasswordEl.setCustomValidity(errorMessage);
+          errorSection.innerHTML = errorMessage;
+        }           
+      } else {
+        const errorSection = document.querySelector('#error-section') as HTMLDivElement;
+        errorSection.classList.add('hide');
+        errorMessage = '';
+        passwordEl.setCustomValidity(errorMessage);
+        confirmPasswordEl.setCustomValidity(errorMessage);
+      }         
+    }
+
+    function validateBirthdayInput(birthdayEl: HTMLInputElement, errorSectionEl: HTMLDivElement): void {
+      const birthday = birthdayEl.value;
+      const pattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/;
+      let errorMessage = '';
+      if (!pattern.test(birthday)) {
+        errorSectionEl.classList.remove('hide');
+        errorMessage = 'Please enter a valid birthday';
+        birthdayEl.setCustomValidity(errorMessage);
+        errorSectionEl.innerHTML = errorMessage;
+      } else {
+        errorSectionEl.classList.add('hide');
+        errorMessage = '';
+        birthdayEl.setCustomValidity(errorMessage);
+      }      
+    }
+
+  </script>
 </html>
