@@ -4,10 +4,10 @@ import account_profile from '../../../public/images/icons/account_circle.svg';
 ---
 <div class="nav-container">
   <div class="main-nav-items">
-    <a href="/">Home</a>
-    <a href="/math">Math</a>
-    <a href="/reading">Reading</a>
-    <a href="/skills">Skills</a>
+    <button id="home">Home</button>
+    <button id="math">Math</button>
+    <button id="reading">Reading</button>
+    <button id="skills">Skills</button>
   </div>
   <div class="account">
     <Image src={account_profile} width={35} alt="Profile" />
@@ -34,12 +34,31 @@ import account_profile from '../../../public/images/icons/account_circle.svg';
     }
   }
   
-  a {
+  button {
+    background-color: transparent;
+    border: none;
     text-decoration: none;
     color: #2d2d2d;
     padding: .5rem 0;
+    cursor: pointer;
   }
   :first-of-type a{
     padding-top: 0;
   }
 </style>
+<script>
+  import { getCurrentUser } from '../../utils/auth';
+  const buttonsEls = document.querySelectorAll('button');
+  buttonsEls.forEach((button) => {
+    button.addEventListener('click', (ev: Event) => {
+      const target = ev.target as HTMLButtonElement;
+      const id = target.id;
+      const currentUser = getCurrentUser();
+      if (!currentUser && id !== 'home') {
+        window.location.href = '/register';
+      } else {        
+        window.location.href = id !== 'home' ? `/${id}` : '/';
+      }
+    });
+  });
+</script>
