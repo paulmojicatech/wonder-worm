@@ -1,11 +1,12 @@
 ---
-import '../styles/global.css';
-import {Image} from 'astro:assets';
-import logo from '../../public/images/wonderworm.png';
-import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
-import Nav from '../components/nav/nav.astro';
-import '@fontsource/silkscreen';
 import '@fontsource-variable/montserrat';
+import '@fontsource/silkscreen';
+import { Image } from 'astro:assets';
+import logo from '../../public/images/wonderworm.png';
+import Nav from '../components/nav/nav.astro';
+import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
+import '../styles/global.css';
+
 ---
 <html lang="en">
 	<head>
@@ -30,15 +31,15 @@ import '@fontsource-variable/montserrat';
 			</div>			
 			<div class="content-container">
         <h2>Register to start learning!</h2>
-        <form action="" method="post" id="register-form">
+        <form id="register-form">
           <fieldset>
             <div class="form-container">            
-              <label for="parentName">Parent Name:*</label>
-              <input type="text" id="parentName" name="parentName" required/>                           
+              <label for="name">Parent Name:*</label>
+              <input type="text" id="name" name="name" required/>                           
               <label for="email">Email:*</label>
               <input type="email" id="email" name="email" required/>                                      
-              <label for="birthday">Birthday(mm/dd/yyyy):*</label>
-              <input type="text" id="birthday" name="birthday" required/>
+              <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
+              <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
               <div id="birthday-error" class="error hide"></div>
               <label for="password">Password:*</label>
               <input type="password" id="password" name="password" required/>              
@@ -75,16 +76,18 @@ import '@fontsource-variable/montserrat';
     .actions > span {
       margin-top: .25rem;
     }
-  </style>
+  </style>  
   <script>
-    import {fromEvent, takeUntil, Subject, merge} from 'rxjs';
+    import {fromEvent, takeUntil, Subject} from 'rxjs';
+    import {registerUser} from '../utils/auth';
+
     const onDesstroySub$ = new Subject<void>();
     window.addEventListener('beforeunload', () => {      
       onDesstroySub$.next();
     });
 
     // birthday validation
-    const birthdayEl = document.querySelector('#birthday') as HTMLInputElement;
+    const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
     const birthdayErrorEl = document.querySelector('#birthday-error') as HTMLDivElement;    
     const passwordEl = document.querySelector('#password') as HTMLInputElement;
     const confirmPasswordEl = document.querySelector('#confirmPassword') as HTMLInputElement;
@@ -93,6 +96,10 @@ import '@fontsource-variable/montserrat';
     // form validation
     const formEl = document.querySelector('form') as HTMLFormElement;
     const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;
+
+    formEl.addEventListener('submit', (ev: Event) => {
+      handleRegisterUser(ev);
+    });
 
     fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {
       validateBirthdayInput(birthdayEl, birthdayErrorEl);
@@ -148,6 +155,24 @@ import '@fontsource-variable/montserrat';
         errorMessage = '';
         birthdayEl.setCustomValidity(errorMessage);
       }      
+    }
+
+    function handleRegisterUser(ev: Event): boolean {
+      ev.preventDefault();      
+      const parentNameEl = document.querySelector('#name') as HTMLInputElement;
+      const emailEl = document.querySelector('#email') as HTMLInputElement;
+      const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
+      const passwordEl = document.querySelector('#password') as HTMLInputElement;      
+      
+      const user = {
+        name: parentNameEl.value,
+        email: emailEl.value,
+        dateOfBirth: birthdayEl.value,
+        password: passwordEl.value
+      };
+      registerUser(user);
+      return false;      
+        
     }
 
   </script>
