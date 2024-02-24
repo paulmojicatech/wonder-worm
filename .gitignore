@@ -22,3 +22,4 @@ pnpm-debug.log*
 
 # local dev
 .vscode/*
+**/.amplify-hosting/*
