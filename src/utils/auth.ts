@@ -1,4 +1,6 @@
 import type { RegisterHttpPostRequest, User } from '../models/auth/auth.interface';
+
+
 export function getCurrentUser(): User | undefined {
   if (localStorage?.getItem('currentUser')) {
     return JSON.parse(localStorage.getItem('currentUser') as string);
@@ -8,7 +10,7 @@ export function getCurrentUser(): User | undefined {
 }
 
 export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
-  const url = 'https://localhost:5001/auth/register';  
+  const url = import.meta.env.DEV ? 'https://localhost:5001/auth/register' : 'https://tv5zym6bmx3cdif7z33tnztzdm0kjmyd.lambda-url.us-east-1.on.aws/auth/register';  
   try {
     const options = {
       method: 'POST',
@@ -19,7 +21,8 @@ export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSu
     const isSuccess = response.ok;
     const message = !isSuccess ? await response.json() : '';
     return Promise.resolve({isSuccess, message});
-  } catch (error) {    
+  } catch (error) { 
+    console.error('Error registering user', error);   
     return Promise.resolve({isSuccess: false, message: 'Error registering user'});
   }
   
