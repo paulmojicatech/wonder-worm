@@ -7,7 +7,7 @@ export function getCurrentUser(): User | undefined {
   }
 }
 
-export async function registerUser(user: RegisterHttpPostRequest): Promise<boolean> {
+export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
   const url = 'https://localhost:5001/auth/register';  
   try {
     const options = {
@@ -16,10 +16,12 @@ export async function registerUser(user: RegisterHttpPostRequest): Promise<boole
       body: JSON.stringify(user),
     }
     const response = await fetch(url, options);
-    return Promise.resolve(!!response);
+    const isSuccess = response.ok;
+    const message = !isSuccess ? await response.json() : '';
+    return Promise.resolve({isSuccess, message});
   } catch (error) {
     console.error('Error registering user', error);
-    return Promise.resolve(false);
+    return Promise.resolve({isSuccess: false, message: 'Error registering user'});
   }
   
 }

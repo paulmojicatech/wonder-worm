@@ -6,6 +6,33 @@ import logo from '../../public/images/wonderworm.png';
 import Nav from '../components/nav/nav.astro';
 import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
 import '../styles/global.css';
+import { registerUser } from '../utils/auth';
+import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
+
+let error: string | undefined = undefined;
+if (Astro.request.method === 'POST') {
+  console.log('in post');  
+  const formData = await Astro.request.formData();
+  const user = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    dateOfBirth: formData.get('dateOfBirth'),
+    password: formData.get('password')
+  } as RegisterHttpPostRequest;
+  console.log('before register user');
+  const response = await handleRegisterUser(user);
+  console.log('after register user');
+  if (response.isSuccess) {
+    return Astro.redirect('/verify');
+  } else {
+    error = response.message;
+  }
+}
+
+async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
+      const response = await registerUser(user);      
+      return Promise.resolve(response);              
+    }
 
 ---
 <html lang="en">
@@ -31,7 +58,7 @@ import '../styles/global.css';
 			</div>			
 			<div class="content-container">
         <h2>Register to start learning!</h2>
-        <form id="register-form">
+        <form id="register-form" method="post">
           <fieldset>
             <div class="form-container">            
               <label for="name">Parent Name:*</label>
@@ -53,7 +80,8 @@ import '../styles/global.css';
             <button disabled id="registerBtn" class="primary" type="submit">Register</button>
             <span>Already have an account? <a href="/login">Login</a></span>
           </div>                    
-        </form>         
+        </form>     
+        {error && <div class="error">{error}</div>}    
       </div>
     </div>
   </body>
@@ -95,11 +123,7 @@ import '../styles/global.css';
     
     // form validation
     const formEl = document.querySelector('form') as HTMLFormElement;
-    const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;
-
-    formEl.addEventListener('submit', (ev: Event) => {
-      handleRegisterUser(ev);
-    });
+    const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;    
 
     fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {
       validateBirthdayInput(birthdayEl, birthdayErrorEl);
@@ -155,25 +179,7 @@ import '../styles/global.css';
         errorMessage = '';
         birthdayEl.setCustomValidity(errorMessage);
       }      
-    }
-
-    function handleRegisterUser(ev: Event): boolean {
-      ev.preventDefault();      
-      const parentNameEl = document.querySelector('#name') as HTMLInputElement;
-      const emailEl = document.querySelector('#email') as HTMLInputElement;
-      const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
-      const passwordEl = document.querySelector('#password') as HTMLInputElement;      
-      
-      const user = {
-        name: parentNameEl.value,
-        email: emailEl.value,
-        dateOfBirth: birthdayEl.value,
-        password: passwordEl.value
-      };
-      registerUser(user);
-      return false;      
-        
-    }
+    }    
 
   </script>
 </html>
