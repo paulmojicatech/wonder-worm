@@ -7,4 +7,11 @@ export interface User {
   token: string;
   children: Child[];
 }
+
+export interface RegisterHttpPostRequest {
+  name: string;
+  email: string;
+  dateOfBirth: string;
+  password: string;
+}
  
