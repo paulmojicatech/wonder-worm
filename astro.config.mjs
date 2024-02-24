@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
-import aws from "@astrojs-aws/adapter"
+import awsAmplify from 'astro-aws-amplify';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: aws()
+  output: 'hybrid',
+  adapter: awsAmplify()
 });
