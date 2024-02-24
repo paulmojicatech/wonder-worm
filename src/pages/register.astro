@@ -11,22 +11,22 @@ import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
 
 let error: string | undefined = undefined;
 if (Astro.request.method === 'POST') {
-  console.log('in post');  
+  error = undefined;
   const formData = await Astro.request.formData();
-  const user = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-    dateOfBirth: formData.get('dateOfBirth'),
-    password: formData.get('password')
-  } as RegisterHttpPostRequest;
-  console.log('before register user');
-  const response = await handleRegisterUser(user);
-  console.log('after register user');
-  if (response.isSuccess) {
-    return Astro.redirect('/verify');
-  } else {
-    error = response.message;
-  }
+  if (formData.has('name')) {
+    const user = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      dateOfBirth: formData.get('dateOfBirth'),
+      password: formData.get('password')
+    } as RegisterHttpPostRequest;    
+    const response = await handleRegisterUser(user);    
+    if (response.isSuccess) {
+      return Astro.redirect('/verify');
+    } else {
+      error = response.message;
+    }
+  }  
 }
 
 async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
@@ -106,8 +106,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     }
   </style>  
   <script>
-    import {fromEvent, takeUntil, Subject} from 'rxjs';
-    import {registerUser} from '../utils/auth';
+    import {fromEvent, takeUntil, Subject} from 'rxjs';    
 
     const onDesstroySub$ = new Subject<void>();
     window.addEventListener('beforeunload', () => {      

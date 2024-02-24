@@ -19,8 +19,7 @@ export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSu
     const isSuccess = response.ok;
     const message = !isSuccess ? await response.json() : '';
     return Promise.resolve({isSuccess, message});
-  } catch (error) {
-    console.error('Error registering user', error);
+  } catch (error) {    
     return Promise.resolve({isSuccess: false, message: 'Error registering user'});
   }
   
