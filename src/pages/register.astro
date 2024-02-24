@@ -111,6 +111,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     window.addEventListener('beforeunload', () => {      
       onDesstroySub$.next();
     });
+    const formEl = document.querySelector('form') as HTMLFormElement;
 
     // birthday validation
     const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
@@ -141,8 +142,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       }
     });
 
-    // form validation
-    const formEl = document.querySelector('form') as HTMLFormElement;
+    // form validation    
     const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;    
 
     fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {          
