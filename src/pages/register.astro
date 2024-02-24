@@ -106,8 +106,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     }
   </style>  
   <script>
-    import {fromEvent, takeUntil, Subject} from 'rxjs';    
-
+    import {fromEvent, takeUntil, Subject, debounceTime, merge} from 'rxjs';    
     const onDesstroySub$ = new Subject<void>();
     window.addEventListener('beforeunload', () => {      
       onDesstroySub$.next();
@@ -116,19 +115,38 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     // birthday validation
     const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
     const birthdayErrorEl = document.querySelector('#birthday-error') as HTMLDivElement;    
+
+    fromEvent(birthdayEl, 'keyup').pipe(debounceTime(50), takeUntil(onDesstroySub$)).subscribe(() => {
+      validateBirthdayInput(birthdayEl, birthdayErrorEl);
+      const isValid = formEl.checkValidity();
+      if (isValid) {
+        registerBtn.disabled = false;
+      } else {
+        registerBtn.disabled = true;
+      }
+    });
+
     const passwordEl = document.querySelector('#password') as HTMLInputElement;
     const confirmPasswordEl = document.querySelector('#confirmPassword') as HTMLInputElement;
     const errorSection = document.querySelector('#error-section') as HTMLDivElement;
-    
+
+    const passwordChange$ = fromEvent(passwordEl, 'keyup').pipe(debounceTime(50), takeUntil(onDesstroySub$));
+    const confrimChange$ = fromEvent(confirmPasswordEl, 'keyup').pipe(debounceTime(50), takeUntil(onDesstroySub$));
+    merge(passwordChange$, confrimChange$).pipe(takeUntil(onDesstroySub$)).subscribe(() => {
+      validatePasswordInputs(passwordEl, confirmPasswordEl, errorSection);
+      if (formEl.checkValidity()) {
+        registerBtn.disabled = false;
+      } else {
+        registerBtn.disabled = true;
+      }
+    });
+
     // form validation
     const formEl = document.querySelector('form') as HTMLFormElement;
     const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;    
 
-    fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {
-      validateBirthdayInput(birthdayEl, birthdayErrorEl);
-      validatePasswordInputs(passwordEl, confirmPasswordEl, errorSection);    
-      const isValid = formEl.checkValidity();
-      if (isValid) {
+    fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {          
+      if (formEl.checkValidity()) {
         registerBtn.disabled = false;
       } else {
         registerBtn.disabled = true;
