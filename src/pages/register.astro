@@ -10,29 +10,29 @@ import { registerUser } from '../utils/auth';
 import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
 
 let error: string | undefined = undefined;
-// if (Astro.request.method === 'POST') {
-//   error = undefined;
-//   const formData = await Astro.request.formData();
-//   if (formData.has('name')) {
-//     const user = {
-//       name: formData.get('name'),
-//       email: formData.get('email'),
-//       dateOfBirth: formData.get('dateOfBirth'),
-//       password: formData.get('password')
-//     } as RegisterHttpPostRequest;    
-//     const response = await handleRegisterUser(user);    
-//     if (response.isSuccess) {
-//       return Astro.redirect('/verify');
-//     } else {
-//       error = response.message;
-//     }
-//   }  
-// }
+if (Astro.request.method === 'POST') {
+  error = undefined;
+  const formData = await Astro.request.formData();
+  if (formData.has('name')) {
+    const user = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      dateOfBirth: formData.get('dateOfBirth'),
+      password: formData.get('password')
+    } as RegisterHttpPostRequest;    
+    const response = await handleRegisterUser(user);    
+    if (response.isSuccess) {
+      return Astro.redirect('/verify');
+    } else {
+      error = response.message;
+    }
+  }  
+}
 
 async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
-      const response = await registerUser(user);      
-      return Promise.resolve(response);              
-    }
+    const response = await registerUser(user);      
+    return Promise.resolve(response);              
+  }
 
 ---
 <html lang="en">
@@ -58,7 +58,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
 			</div>			
 			<div class="content-container">
         <h2>Register to start learning!</h2>
-        <form id="register-form">
+        <form id="register-form" method="POST">
           <fieldset>
             <div class="form-container">            
               <label for="name">Parent Name:*</label>
@@ -106,32 +106,13 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     }
   </style>  
   <script>
-    import {fromEvent, takeUntil, Subject, debounceTime, merge} from 'rxjs';    
-    import type { RegisterHttpPostRequest } from '../models/auth/auth.interface'
-    import {registerUser} from '../utils/auth';
+    
+    import { Subject, debounceTime, fromEvent, merge, takeUntil } from 'rxjs';
     const onDesstroySub$ = new Subject<void>();
     window.addEventListener('beforeunload', () => {      
       onDesstroySub$.next();
     });
     const formEl = document.querySelector('form') as HTMLFormElement;
-
-    formEl.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(formEl);
-      const user = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        dateOfBirth: formData.get('dateOfBirth') as string,
-        password: formData.get('password') as string
-      } as RegisterHttpPostRequest;    
-      const response = await registerUser(user);    
-      if (response.isSuccess) {
-        window.location.href = '/verify';
-      } else {
-        const errorEl = document.querySelector('.error');
-        errorEl!.innerHTML = response.message;
-      }
-    });
 
     // birthday validation
     const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
@@ -217,6 +198,6 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
         birthdayEl.setCustomValidity(errorMessage);
       }      
     }    
-
   </script>
+
 </html>
