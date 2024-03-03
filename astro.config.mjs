@@ -4,5 +4,6 @@ import awsAmplify from 'astro-aws-amplify';
 // https://astro.build/config
 export default defineConfig({
   output: 'hybrid',
-  adapter: awsAmplify()
+  adapter: awsAmplify(),
+  outDir: './.amplify-hosting'
 });
