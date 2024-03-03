@@ -10,7 +10,7 @@ export function getCurrentUser(): User | undefined {
 }
 
 export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
-  const url = import.meta.env.DEV ? 'https://localhost:5001/auth/register' : 'https://tv5zym6bmx3cdif7z33tnztzdm0kjmyd.lambda-url.us-east-1.on.aws/auth/register';  
+  const url = 'https://tv5zym6bmx3cdif7z33tnztzdm0kjmyd.lambda-url.us-east-1.on.aws/auth/register';
   try {
     const options = {
       method: 'POST',
