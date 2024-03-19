@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "package-app": "docker build -t paulmojicatech/astro-wonder-worm-ui --platform linux/amd64 -f .dockerfile . && docker push paulmojicatech/astro-wonder-worm-ui",
+    "run-docker": "docker build -t paulmojicatech/astro-wonder-worm-ui -f .dockerfile . && docker run -p 4321:4321 -d paulmojicatech/astro-wonder-worm-ui"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
