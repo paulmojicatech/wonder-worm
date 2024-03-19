@@ -8,11 +8,13 @@ import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
 import '../styles/global.css';
 import { registerUser } from '../utils/auth';
 import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
+import Loader from '../components/loader/loader.astro';
 
 let error: string | undefined = undefined;
+let isLoading = false;
 if (Astro.request.method === 'POST') {
   error = undefined;
-  const formData = await Astro.request.formData();
+  const formData = await Astro.request.formData();  
   if (formData.has('name')) {
     const user = {
       name: formData.get('name'),
@@ -20,16 +22,19 @@ if (Astro.request.method === 'POST') {
       dateOfBirth: formData.get('dateOfBirth'),
       password: formData.get('password')
     } as RegisterHttpPostRequest;    
+    isLoading = true;
     const response = await handleRegisterUser(user);    
-    if (response.isSuccess) {
-      return Astro.redirect('/verify');
+    if (response.isSuccess) {   
+      isLoading = false;       
+      return Astro.redirect('/login');
     } else {
+      isLoading = false;    
       error = response.message;
     }
   }  
 }
 
-async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
+async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {    
     const response = await registerUser(user);      
     return Promise.resolve(response);              
   }
@@ -56,33 +61,38 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
 			<div class="nav-container">
 				<Nav />
 			</div>			
-			<div class="content-container">
-        <h2>Register to start learning!</h2>
-        <form id="register-form" method="POST">
-          <fieldset>
-            <div class="form-container">            
-              <label for="name">Parent Name:*</label>
-              <input type="text" id="name" name="name" required/>                           
-              <label for="email">Email:*</label>
-              <input type="email" id="email" name="email" required/>                                      
-              <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
-              <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
-              <div id="birthday-error" class="error hide"></div>
-              <label for="password">Password:*</label>
-              <input type="password" id="password" name="password" required/>              
-              <label for="confirmPassword">Confirm Password:*</label>
-              <input type="password" id="confirmPassword" name="confirmPassword" required/>      
-              <div id="error-section" class="error hide">
-              </div>
-            </div>        
-          </fieldset>
-          <div class="actions">
-            <button disabled id="registerBtn" class="primary" type="submit">Register</button>
-            <span>Already have an account? <a href="/login">Login</a></span>
-          </div>                    
-        </form>     
-        {error && <div class="error">{error}</div>}    
-      </div>
+      <div id="loading-container" class="hide">
+        <Loader />
+      </div>      
+      {!isLoading && 
+        <div class="content-container">        
+          <h2>Register to start learning!</h2>
+          <form id="register-form" method="POST">
+            <fieldset>
+              <div class="form-container">            
+                <label for="name">Parent Name:*</label>
+                <input type="text" id="name" name="name" required/>                           
+                <label for="email">Email:*</label>
+                <input type="email" id="email" name="email" required/>                                      
+                <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
+                <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
+                <div id="birthday-error" class="error hide"></div>
+                <label for="password">Password:*</label>
+                <input type="password" id="password" name="password" required/>              
+                <label for="confirmPassword">Confirm Password:*</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required/>      
+                <div id="error-section" class="error hide">
+                </div>
+              </div>        
+            </fieldset>
+            <div class="actions">
+              <button disabled id="registerBtn" class="primary" type="submit">Register</button>
+              <span>Already have an account? <a href="/login">Login</a></span>
+            </div>                    
+          </form>     
+          {error && <div class="error">{error}</div>}    
+        </div>            
+      }      
     </div>
   </body>
   <style>
@@ -104,9 +114,20 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     .actions > span {
       margin-top: .25rem;
     }
+    #loading-container {      
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+    }
+    .show {
+      display: flex;
+    }
+    .hide {
+      display: none;
+    }
   </style>  
-  <script>
-    
+  <script>    
     import { Subject, debounceTime, fromEvent, merge, takeUntil } from 'rxjs';
     const onDesstroySub$ = new Subject<void>();
     window.addEventListener('beforeunload', () => {      
@@ -145,6 +166,14 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
 
     // form validation    
     const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;    
+    registerBtn.addEventListener('click', () => {      
+      const loadingContainer = document.querySelector('#loading-container') as HTMLDivElement;
+      const contentContainer = document.querySelector('.content-container') as HTMLDivElement;
+      loadingContainer.classList.remove('hide');
+      loadingContainer.classList.add('show');
+      contentContainer.classList.remove('show');
+      contentContainer.classList.add('hide');
+    });
 
     fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {          
       if (formEl.checkValidity()) {
