@@ -31,3 +31,8 @@ button[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.form-field-container {
+  margin-bottom: 1rem;
+  display:inline-flex;
+  justify-content: space-between;
+}

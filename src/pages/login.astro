@@ -6,6 +6,7 @@ import logo from '../../public/images/wonderworm.png';
 import Nav from '../components/nav/nav.astro';
 import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
 import '../styles/global.css';
+import '../styles/spacing.css';
 ---
 
 <html lang="en">
@@ -30,8 +31,29 @@ import '../styles/global.css';
 				<Nav />
 			</div>			
 			<div class="content-container">        
-        <span>Coming Soon!</span>        
+        <form>
+					<div class="form-field-container">
+						<div class="v-align-center">
+							<label for="email">Email:</label>
+						</div>
+						
+						<input type="email" id="email" name="email" required>
+					</div>					
+					<div class="form-field-container">
+						<div class="d-flex-items-center">
+							<label for="password" class="mr-1rem">Password:</label>
+						</div>						
+						<input type="password" id="password" name="password" required>
+					</div>					
+					<button type="submit" class="primary">Submit</button>
+				</form>   
 			</div>			
 		</div>		
+		<style>
+			form {
+				display: flex;
+				flex-direction: column;
+			}
+		</style>
 	</body>	    
 </html>
