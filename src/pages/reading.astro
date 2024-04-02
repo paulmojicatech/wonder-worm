@@ -1,46 +1,9 @@
 ---
-import '@fontsource-variable/montserrat';
-import '@fontsource/silkscreen';
-import { Image } from 'astro:assets';
-import logo from '../../public/images/wonderworm.png';
-import Nav from '../components/nav/nav.astro';
-import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
-import '../styles/global.css';
+import MainLayout from '../layouts/main-layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<title>WonderWorm</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" type="image/x-icon" href="images/wonderworm.png">
-	</head>
-	<body>
-		<header>
-			<Image width={50} src={logo} alt="WonderWorm Logo" />
-			<div class="header-container">
-				<h1>WonderWorm</h1>
-				<div class="theme-toggle">
-					<ThemeToggle />
-				</div>
-			</div>			
-		</header>	
-		<div class="main-container">
-			<div class="nav-container">
-				<Nav />
-			</div>			
-			<div class="content-container">				
-				Coming Soon!
-			</div>			
-		</div>		
-	</body>	
-  <script>
-    import { getCurrentUser } from '../utils/auth';
-    window.addEventListener('DOMContentLoaded', () => {
-      const currentUser = getCurrentUser();
-      if (!currentUser) {
-        window.location.href = '/register';
-      }      
-    });
-  </script>
-</html>
+<MainLayout>
+	<div class="content-container">				
+		Coming Soon!
+	</div>
+</MainLayout>

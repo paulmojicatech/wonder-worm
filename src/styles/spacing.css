@@ -1,6 +1,9 @@
 .mr-1rem {
   margin-right: 1rem;
 }
+.mb-1rem {
+  margin-bottom: 1rem;
+}
 .align-items-center {
   align-items: center;
 }

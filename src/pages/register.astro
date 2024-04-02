@@ -1,14 +1,9 @@
 ---
-import '@fontsource-variable/montserrat';
-import '@fontsource/silkscreen';
-import { Image } from 'astro:assets';
-import logo from '../../public/images/wonderworm.png';
-import Nav from '../components/nav/nav.astro';
-import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
+import Loader from '../components/loader/loader.astro';
+import MainLayout from '../layouts/main-layout.astro';
+import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
 import '../styles/global.css';
 import { registerUser } from '../utils/auth';
-import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
-import Loader from '../components/loader/loader.astro';
 
 let error: string | undefined = undefined;
 let isLoading = false;
@@ -40,61 +35,39 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
   }
 
 ---
-<html lang="en">
-	<head>
-		<title>WonderWorm</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" type="image/x-icon" href="images/wonderworm.png">
-	</head>
-	<body>
-		<header>
-			<Image width={50} src={logo} alt="WonderWorm Logo" />
-			<div class="header-container">
-				<h1>WonderWorm</h1>
-				<div class="theme-toggle">
-					<ThemeToggle />
-				</div>
-			</div>			
-		</header>	
-		<div class="main-container">
-			<div class="nav-container">
-				<Nav />
-			</div>			
-      <div id="loading-container" class="hide">
-        <Loader />
-      </div>      
-      {!isLoading && 
-        <div class="content-container">        
-          <h2>Register to start learning!</h2>
-          <form id="register-form" method="POST">
-            <fieldset>
-              <div class="form-container">            
-                <label for="name">Parent Name:*</label>
-                <input type="text" id="name" name="name" required/>                           
-                <label for="email">Email:*</label>
-                <input type="email" id="email" name="email" required/>                                      
-                <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
-                <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
-                <div id="birthday-error" class="error hide"></div>
-                <label for="password">Password:*</label>
-                <input type="password" id="password" name="password" required/>              
-                <label for="confirmPassword">Confirm Password:*</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required/>      
-                <div id="error-section" class="error hide">
-                </div>
-              </div>        
-            </fieldset>
-            <div class="actions">
-              <button disabled id="registerBtn" class="primary" type="submit">Register</button>
-              <span>Already have an account? <a href="/login">Login</a></span>
-            </div>                    
-          </form>     
-          {error && <div class="error">{error}</div>}    
-        </div>            
-      }      
-    </div>
-  </body>
+<MainLayout>
+  <div id="loading-container" class="hide">
+    <Loader />
+  </div>      
+  {!isLoading && 
+    <div class="content-container">        
+      <h2>Register to start learning!</h2>
+      <form id="register-form" method="POST">
+        <fieldset>
+          <div class="form-container">            
+            <label for="name">Parent Name:*</label>
+            <input type="text" id="name" name="name" required/>                           
+            <label for="email">Email:*</label>
+            <input type="email" id="email" name="email" required/>                                      
+            <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
+            <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
+            <div id="birthday-error" class="error hide"></div>
+            <label for="password">Password:*</label>
+            <input type="password" id="password" name="password" required/>              
+            <label for="confirmPassword">Confirm Password:*</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required/>      
+            <div id="error-section" class="error hide">
+            </div>
+          </div>        
+        </fieldset>
+        <div class="actions">
+          <button disabled id="registerBtn" class="primary" type="submit">Register</button>
+          <span>Already have an account? <a href="/login">Login</a></span>
+        </div>                    
+      </form>     
+      {error && <div class="error">{error}</div>}    
+    </div>            
+  }
   <style>
     .form-container {
       display: flex;
@@ -228,5 +201,4 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       }      
     }    
   </script>
-
-</html>
+</MainLayout>
