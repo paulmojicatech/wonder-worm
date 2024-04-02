@@ -1,13 +1,14 @@
 ---
 import {Image} from 'astro:assets';
 import account_profile from '../../../public/images/icons/account_circle.svg';
+import '../../styles/spacing.css';
 ---
 <div class="nav-container">
   <div class="main-nav-items">
-    <button id="home">Home</button>
-    <button id="math">Math</button>
-    <button id="reading">Reading</button>
-    <button id="skills">Skills</button>
+    <a class="mb-1rem" href="/">Home</a>
+    <a class="mb-1rem" href="/math">Math</a>
+    <a class="mb-1rem" href="/reading">Reading</a>
+    <a href="/skills">Skills</a>
   </div>
   <div class="account">
     <Image src={account_profile} width={35} alt="Profile" />
@@ -34,31 +35,11 @@ import account_profile from '../../../public/images/icons/account_circle.svg';
     }
   }
   
-  button {
-    background-color: transparent;
-    border: none;
+  a {    
     text-decoration: none;
-    color: #2d2d2d;
-    padding: .5rem 0;
-    cursor: pointer;
+    color: #2d2d2d;        
   }
   :first-of-type a{
     padding-top: 0;
   }
 </style>
-<script>
-  import { getCurrentUser } from '../../utils/auth';
-  const buttonsEls = document.querySelectorAll('button');
-  buttonsEls.forEach((button) => {
-    button.addEventListener('click', (ev: Event) => {
-      const target = ev.target as HTMLButtonElement;
-      const id = target.id;
-      const currentUser = getCurrentUser();
-      if (!currentUser && id !== 'home') {
-        window.location.href = '/register';
-      } else {        
-        window.location.href = id !== 'home' ? `/${id}` : '/';
-      }
-    });
-  });
-</script>

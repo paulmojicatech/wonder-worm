@@ -14,4 +14,9 @@ export interface RegisterHttpPostRequest {
   dateOfBirth: string;
   password: string;
 }
+
+export interface LoginHttpPostRequest {
+  email: string;
+  password: string;
+}
  

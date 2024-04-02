@@ -1,0 +1,15 @@
+---
+import {Image} from 'astro:assets';
+import logo from '../../../public/images/wonderworm.png';
+import ThemeToggle from '../theme-toggle/theme-toggle.astro';
+import '@fontsource/silkscreen';
+---
+<header>
+  <Image width={50} src={logo} alt="WonderWorm Logo" />
+  <div class="header-container">
+    <h1>WonderWorm</h1>
+    <div class="theme-toggle">
+      <ThemeToggle />
+    </div>
+  </div>			
+</header>	

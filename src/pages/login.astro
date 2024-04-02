@@ -1,37 +1,59 @@
 ---
 import '@fontsource-variable/montserrat';
-import '@fontsource/silkscreen';
-import { Image } from 'astro:assets';
-import logo from '../../public/images/wonderworm.png';
-import Nav from '../components/nav/nav.astro';
-import ThemeToggle from '../components/theme-toggle/theme-toggle.astro';
+import MainLayout from '../layouts/main-layout.astro';
 import '../styles/global.css';
+import '../styles/spacing.css';
+import { login } from '../utils/auth';
+
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	if (formData.has('email') && formData.has('password')) {
+		const email = formData.get('email');
+		const password = formData.get('password');
+		const isSuccess = await handleSubmit(`${email}`, `${password}`);
+		if (!isSuccess) {
+			console.error('Login failed');
+		} else {
+			return Astro.redirect('/');
+		}
+		
+	}
+}
+
+async function handleSubmit(userEmail: string, password: string): Promise<boolean> {	
+	const loginResp = await login({email: userEmail, password: password});
+	if (loginResp.isSuccess) {
+		const {isSuccess, ...user} = loginResp;	
+		Astro.cookies.set('user', JSON.stringify(user));		
+	}
+	return Promise.resolve(loginResp.isSuccess);
+}
+
 ---
 
-<html lang="en">
-	<head>
-		<title>WonderWorm</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" type="image/x-icon" href="images/wonderworm.png">
-	</head>
-	<body>  
-		<header>
-			<Image width={50} src={logo} alt="WonderWorm Logo" />
-			<div class="header-container">
-				<h1>WonderWorm</h1>
-				<div class="theme-toggle">
-					<ThemeToggle />
+<MainLayout>
+	<div class="content-container">        
+		<form id="loginForm" method="POST">
+			<div class="form-field-container">
+				<div class="v-align-center">
+					<label for="email">Email:</label>
 				</div>
-			</div>			
-		</header>	
-		<div class="main-container">
-			<div class="nav-container">
-				<Nav />
-			</div>			
-			<div class="content-container">        
-        <span>Coming Soon!</span>        
-			</div>			
-		</div>		
-	</body>	    
-</html>
+				
+				<input type="email" id="email" name="email" required>
+			</div>					
+			<div class="form-field-container">
+				<div class="d-flex-items-center">
+					<label for="password" class="mr-1rem">Password:</label>
+				</div>						
+				<input type="password" id="password" name="password" required>
+			</div>					
+			<button type="submit" class="primary">Submit</button>
+		</form>   
+	</div>
+	<style>
+		form {
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
+</MainLayout>
