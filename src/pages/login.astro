@@ -15,8 +15,7 @@ if (Astro.request.method === 'POST') {
 			console.error('Login failed');
 		} else {
 			return Astro.redirect('/');
-		}
-		
+		}		
 	}
 }
 
@@ -26,7 +25,7 @@ async function handleSubmit(userEmail: string, password: string): Promise<boolea
 		const {isSuccess, ...user} = loginResp;	
 		Astro.cookies.set('user', JSON.stringify(user));		
 	}
-	return Promise.resolve(loginResp.isSuccess);
+	return loginResp.isSuccess;
 }
 
 ---
