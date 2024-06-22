@@ -1,8 +1,14 @@
 .mr-1rem {
   margin-right: 1rem;
 }
+.mt-1rem {
+  margin-top: 1rem;
+}
 .mb-1rem {
   margin-bottom: 1rem;
+}
+.ml-1rem {
+  margin-left: 1rem;
 }
 .align-items-center {
   align-items: center;
@@ -10,7 +16,17 @@
 .justify-content-center {
   justify-content: center;
 }
+.flex {
+  display: flex;
+}
 .d-flex-items-center {
   display: inline-flex;
   align-items: center;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.w-100 {
+  width: 100%;
 }

@@ -1,9 +1,24 @@
 ---
 import MainLayout from '../layouts/main-layout.astro';
+import Card from '../components/card/card.astro';
 ---
 
 <MainLayout>
 	<div class="content-container">				
-		Coming Soon!
+		<Card header="Comprehension" body="Test comprehension by reading a story and answering questions about it.">
+			<div class="action-section" slot="actionSlot">
+				<a href="/comprehension">Start</a>
+			</div>			
+		</Card>
 	</div>
 </MainLayout>
+<style>
+	.action-section {
+		display: flex;
+		width: 100%;
+		justify-content: flex-end;
+	}
+	.loader {
+		display: none;
+	}
+</style>

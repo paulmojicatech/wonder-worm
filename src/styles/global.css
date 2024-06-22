@@ -1,5 +1,6 @@
 @import './dark.css' layer(dark);
 @import './light.css' layer(light);
+@import './fonts.css' layer(fonts);
 @import './forms.css' layer(forms);
 
 * {
