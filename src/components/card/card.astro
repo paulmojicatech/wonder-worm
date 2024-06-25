@@ -6,8 +6,17 @@ const { header, body } = Astro.props;
   <div class="header">
     <span>{header}</span>
   </div>
-  <div class="body">
-    <article>{body}</article>
+  {body &&
+    <div class="body">
+      <article>{body}</article>
+    </div>
+  }
+  {!body &&
+    <slot name="bodySlot"/>
+  } 
+  <div class="action">
+    <slot name="actionSlot"/>
+  </div>
 </div>
 <style>
   body.dark {
@@ -34,8 +43,16 @@ const { header, body } = Astro.props;
   }
   .header {
     font-size: 1.25rem;
+    padding: 1rem;
   }
   .body {
     overflow: auto;
+    article {
+      
+    }
+  }
+  .action {
+    display: inline-flex;
+    width: 100%;
   }
 </style>

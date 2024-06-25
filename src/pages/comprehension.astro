@@ -1,0 +1,16 @@
+---
+import MainLayout from '../layouts/main-layout.astro';
+import {ComprehensionDetailsComponent} from '../components/comprehension-details/comprehension-details.component';
+
+
+const cookie = Astro.cookies.get('user');
+let token = undefined;
+if (!cookie) {
+   return Astro.redirect('/login');
+} else {
+  token = cookie.json().token;
+}
+---
+<MainLayout>    
+  <ComprehensionDetailsComponent client:only />
+</MainLayout>
