@@ -1,24 +1,33 @@
 ---
 import MainLayout from '../layouts/main-layout.astro';
 import Card from '../components/card/card.astro';
+import {NgLoaderComponent} from '../components/ng-loader/ng-loader.component';
+
+let isLoading = false;
+
+if (Astro.request.method === 'POST') {
+	isLoading = true;
+	return Astro.redirect('/comprehension');
+}
+
 ---
 
 <MainLayout>
 	<div class="content-container">				
 		<Card header="Comprehension" body="Test comprehension by reading a story and answering questions about it.">
 			<div class="action-section" slot="actionSlot">
-				<a href="/comprehension">Start</a>
+				<form method="POST">
+					<button type="submit">Start</button>
+				</form>				
 			</div>			
 		</Card>
 	</div>
+	{isLoading && <NgLoaderComponent client:load />}
 </MainLayout>
 <style>
 	.action-section {
 		display: flex;
 		width: 100%;
 		justify-content: flex-end;
-	}
-	.loader {
-		display: none;
 	}
 </style>

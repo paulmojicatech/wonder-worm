@@ -1,49 +1,16 @@
 ---
 import MainLayout from '../layouts/main-layout.astro';
-import Card from '../components/card/card.astro';
+import {ComprehensionDetailsComponent} from '../components/comprehension-details/comprehension-details.component';
 
-const url = 'https://dqgxskajzvgovshtegzl4z4zbu0ggzkj.lambda-url.us-east-1.on.aws/comprehension/story';
+
 const cookie = Astro.cookies.get('user');
-let story = '';
-let questionCards: {question: string, possibleAnswers: {answer: string, isCorrect: boolean}[]}[]= [];
+let token = undefined;
 if (!cookie) {
    return Astro.redirect('/login');
-} else {  
-  const authorization = `Bearer ${cookie.json().token}`;
-  const response = await fetch(url, {
-    headers: {
-      Authorization: authorization,
-    },
-  }).catch((error) => {
-    alert(error);
-  });
-  if (!(response as Response).ok) {
-    const error = (response as Response).status;
-    alert(`HTTP-Error: ${error}`);
-  }
-  const data = await (response as Response).json();
-  story = data.story;
-  questionCards = data.questionsAndAnswers;  
-  console.log(questionCards);
+} else {
+  token = cookie.json().token;
 }
-
 ---
 <MainLayout>    
-  <span class="font-2rem ml-1rem">Story</span>
-  <article class="mt-1rem mb-1rem">
-    {story}
-  </article>
-  <section class="flex-column w-100">
-    {questionCards.map((card, index) => (
-      <div class="mb-1rem w-100 flex align-items-center justify-content-center">
-        <Card header={card.question} key={index}>
-          {card.possibleAnswers.map((possibleAnswer) => (            
-            <div class="flex align" slot="bodySlot">
-              <span>{possibleAnswer.answer}</span>
-            </div>             
-          ))}            
-        </Card>
-      </div>      
-    ))}
-  </section>  
+  <ComprehensionDetailsComponent client:only />
 </MainLayout>
