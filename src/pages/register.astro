@@ -21,7 +21,7 @@ if (Astro.request.method === 'POST') {
     const response = await handleRegisterUser(user);    
     if (response.isSuccess) {   
       isLoading = false;       
-      return Astro.redirect('/login');
+      return Astro.redirect('/register-success');
     } else {
       isLoading = false;    
       error = response.message;

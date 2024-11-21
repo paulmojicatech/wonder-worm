@@ -3,6 +3,12 @@ import MainLayout from '../layouts/main-layout.astro';
 import Card from '../components/card/card.astro';
 import {NgLoaderComponent} from '../components/ng-loader/ng-loader.component';
 
+const user = Astro.cookies.get('user');
+if (!user) {
+	console.log('Redirecting to register page');
+	return Astro.redirect('/register');
+}
+
 let isLoading = false;
 
 if (Astro.request.method === 'POST') {
