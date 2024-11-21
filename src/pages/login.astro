@@ -13,7 +13,7 @@ if (Astro.request.method === 'POST') {
 		const isSuccess = await handleSubmit(`${email}`, `${password}`);
 		if (!isSuccess) {
 			console.error('Login failed');
-		} else {
+		} else {			
 			return Astro.redirect('/');
 		}		
 	}

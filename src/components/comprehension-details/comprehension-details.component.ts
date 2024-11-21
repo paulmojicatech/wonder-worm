@@ -22,9 +22,9 @@ import { NgLoaderComponent } from '../ng-loader/ng-loader.component';
           <ul>
             @for(possibleAnswer of question.possibleAnswers; track possibleAnswer.answer) {
               <li>
-                <input (click)="showAnswerS.set(possibleAnswer.answer)" type="radio" name="{{question.question}}" value="{{possibleAnswer.answer}}">
+                <input (click)="handleQuestionAnswerClick(question.question, possibleAnswer.answer)" type="radio" name="{{question.question}}" value="{{possibleAnswer.answer}}">
                 <label>{{possibleAnswer.answer}}</label>
-                @if (showAnswerS() === possibleAnswer.answer) {
+                @if (showAnswerS()?.question === question.question && showAnswerS()?.answer === possibleAnswer.answer) {
                   @if (possibleAnswer.isCorrect) {
                     <span class="ml-1rem correct">Correct</span>
                   } @else {
@@ -59,7 +59,7 @@ export class ComprehensionDetailsComponent implements OnInit {
 
   storyS = signal<string | undefined>(undefined);
   questionAndAnswersS = signal<{question: string, possibleAnswers: {answer: string, isCorrect: boolean}[]}[]>([]);
-  showAnswerS = signal<string | undefined>(undefined);
+  showAnswerS = signal<{question: string, answer: string} | undefined>(undefined);
 
 
   ngOnInit(): void {
@@ -87,6 +87,11 @@ export class ComprehensionDetailsComponent implements OnInit {
         this.questionAndAnswersS.set(updatedQuestionsAndAnswers);
       });
     }
+  }
+
+  handleQuestionAnswerClick(question: string, answer: string): void {
+    console.log(question, answer);
+    this.showAnswerS.set({question, answer});
   }
 
   private shuffleAnswers(answers: {answer: string, isCorrect: boolean}[]): {answer: string, isCorrect: boolean}[] {
