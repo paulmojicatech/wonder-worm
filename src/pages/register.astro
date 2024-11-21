@@ -73,8 +73,18 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       display: flex;
       flex-direction: column;      
       gap: .5rem; 
-      width: 15rem;
+      width: 100%;
       flex-wrap: wrap;
+    }
+    fieldset {
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+    @media screen and (min-width: 768px) {
+      form {
+        width: 50%
+      }
+      
     }
     .hide {
       display: none;

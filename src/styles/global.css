@@ -6,9 +6,15 @@
 * {
   box-sizing: border-box;
 }
+@media screen and (max-width: 768px) {
+  html {
+    height: calc(100vh - 8rem);
+  }
+  
+}
 body {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   position: absolute;
   left: 0;
   top: 0;

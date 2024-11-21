@@ -20,6 +20,14 @@ import '@fontsource-variable/montserrat';
 			<div class="content-container">				
 				<slot/>
 			</div>			
-		</div>	
+		</div>
+		<style>
+			.nav-container {
+				width: 7rem;
+			}
+			.content-container {
+				width: calc(100% - 5rem);
+			}
+		</style>	
   </body>
 </html>
