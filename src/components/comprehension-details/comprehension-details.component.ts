@@ -22,8 +22,15 @@ import { NgLoaderComponent } from '../ng-loader/ng-loader.component';
           <ul>
             @for(possibleAnswer of question.possibleAnswers; track possibleAnswer.answer) {
               <li>
-                <input type="radio" name="{{question.question}}" value="{{possibleAnswer.answer}}">
+                <input (click)="showAnswerS.set(possibleAnswer.answer)" type="radio" name="{{question.question}}" value="{{possibleAnswer.answer}}">
                 <label>{{possibleAnswer.answer}}</label>
+                @if (showAnswerS() === possibleAnswer.answer) {
+                  @if (possibleAnswer.isCorrect) {
+                    <span class="ml-1rem correct">Correct</span>
+                  } @else {
+                    <span class="ml-1rem wrong">Try Again!</span>
+                  }                  
+                }           
               </li>
             }
           </ul>
@@ -34,6 +41,12 @@ import { NgLoaderComponent } from '../ng-loader/ng-loader.component';
   styles: `
     li {
       list-style-type: none;
+    }
+    .correct {      
+      color: green;
+    }
+    .wrong {
+      color: red;
     }
   `
 })
@@ -46,6 +59,7 @@ export class ComprehensionDetailsComponent implements OnInit {
 
   storyS = signal<string | undefined>(undefined);
   questionAndAnswersS = signal<{question: string, possibleAnswers: {answer: string, isCorrect: boolean}[]}[]>([]);
+  showAnswerS = signal<string | undefined>(undefined);
 
 
   ngOnInit(): void {
@@ -64,9 +78,19 @@ export class ComprehensionDetailsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         this.storyS.set(response.story);
-        this.questionAndAnswersS.set(response.questionsAndAnswers);
+        const updatedQuestionsAndAnswers = response.questionsAndAnswers.map(questionAndAnswer => {
+          return {
+            question: questionAndAnswer.question,
+            possibleAnswers: this.shuffleAnswers(questionAndAnswer.possibleAnswers)
+          };
+        });
+        this.questionAndAnswersS.set(updatedQuestionsAndAnswers);
       });
     }
+  }
+
+  private shuffleAnswers(answers: {answer: string, isCorrect: boolean}[]): {answer: string, isCorrect: boolean}[] {
+    return answers.sort(() => Math.random() - 0.5);
   }
 
 }
