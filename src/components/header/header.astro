@@ -15,12 +15,12 @@ const isMobile = /mobile|android|iphone|ipad|phone/i.test(userAgent);
     <h1 class="text-indigo-700 dark:text-indigo-300">WonderWorm</h1>
     {!isMobile && (
       <div class="theme-toggle">
-        <ThemeToggle client:media="(min-width: 768px)" />
+        <ThemeToggle />
       </div>
     )}
     {isMobile && (
       <div class="mobile-nav-container">
-        <MobileNav client:media="(max-width: 767px)" />
+        <MobileNav />
       </div>
     )}
   </div>
