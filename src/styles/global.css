@@ -1,7 +1,10 @@
+@import "tailwindcss" layer(tailwind);
 @import './dark.css' layer(dark);
 @import './light.css' layer(light);
 @import './fonts.css' layer(fonts);
 @import './forms.css' layer(forms);
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 * {
   box-sizing: border-box;
@@ -10,8 +13,9 @@
   html {
     height: calc(100vh - 8rem);
   }
-  
+
 }
+
 body {
   width: 100vw;
   height: 100%;
@@ -52,10 +56,10 @@ h1 {
 @media screen and (min-width: 768px) {
   h1 {
     font-size: 2rem;
-  }			
+  }
 }
 .main-container {
-  display: inline-flex;			
+  display: inline-flex;
   width: 100%;
   height: calc(100% - 5rem);
   overflow-y: hidden;

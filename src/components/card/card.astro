@@ -2,57 +2,29 @@
 const { header, body } = Astro.props;
 ---
 
-<div class="card-container">
-  <div class="header">
+<div class="flex flex-col h-full rounded-xl shadow-lg p-6 transition-colors duration-300 card-bg">
+  <div class="header text-xl font-bold text-indigo-700 dark:text-indigo-300 mb-2 px-2">
     <span>{header}</span>
   </div>
   {body &&
-    <div class="body">
+    <div class="body flex-1 overflow-auto text-gray-700 dark:text-gray-200 mb-2 px-2">
       <article>{body}</article>
     </div>
   }
   {!body &&
     <slot name="bodySlot"/>
-  } 
-  <div class="action">
+  }
+  <div class="action inline-flex w-full mt-2">
     <slot name="actionSlot"/>
   </div>
 </div>
 <style>
-  body.dark {
-    .card-container {
-      background-color: #4a4946;
-      border-radius: 5px;
-    }
-  }
-  .card-container {
-    display: flex;
-    flex-direction: column;
-    width: 15rem;
-    height: 100%;    
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    padding: 1rem;
-  }
-
-  @media screen and (min-width: 768px) {
-    .card-container {
-      width: 20rem;
-    
-    }
-  }
-  .header {
-    font-size: 1.25rem;
-    padding: 1rem;
-  }
-  .body {
-    overflow: auto;
-    article {
-      
-    }
-  }
-  .action {
-    display: inline-flex;
-    width: 100%;
-  }
+.card-bg {
+  background-color: #fff;
+  color: #222;
+}
+body.dark .card-bg {
+  background: linear-gradient(135deg, #3a3b3f 0%, #5a5c60 100%);
+  color: #e0e6ed;
+}
 </style>
