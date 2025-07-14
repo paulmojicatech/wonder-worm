@@ -6,7 +6,7 @@ import '../styles/global.css';
 const user = Astro.cookies.get('user');
 if (!user) {
 	console.log('Redirecting to register page');
-	return Astro.redirect('/register');
+	return Astro.redirect('/login');
 }
 
 ---

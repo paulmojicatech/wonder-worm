@@ -40,8 +40,8 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
     <Loader />
   </div>
   {!isLoading &&
-    <div class="flex flex-col items-center justify-center min-h-[60vh]">
-      <h2 class="text-2xl font-bold mb-6 text-indigo-700">Register to start learning!</h2>
+    <div class="flex flex-col items-center justify-center min-h-[60vh] text-[#1a1a1a]">
+      <h2 class="text-2xl font-bold mb-6 text-indigo-700 dark:text-indigo-300">Register to start learning!</h2>
       <form id="register-form" method="POST" class="w-full max-w-md bg-white rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
         <fieldset class="flex flex-col gap-4">
           <label for="name" class="font-semibold">Parent Name:*</label>
@@ -59,7 +59,14 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
         </fieldset>
         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors mt-4">Register</button>
         {error && <div class="text-red-600 text-sm mt-2">{error}</div>}
+        <div class="mt-4 text-center">
+        <span>Already registered?</span>
+        <a href="/login" class="font-semibold ml-1">
+          <span class="text-indigo-700 dark:text-indigo-300 hover:underline">Sign in here</span>
+        </a>
+      </div>
       </form>
+
     </div>
   }
   <script>
