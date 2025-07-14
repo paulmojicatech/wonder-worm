@@ -16,18 +16,29 @@ import '@fontsource-variable/montserrat';
     <div class="main-container">
 			<div class="nav-container">
 				<Nav />
-			</div>			
-			<div class="content-container">				
+			</div>
+			<div class="content-container">
 				<slot/>
-			</div>			
+			</div>
 		</div>
 		<style>
 			.nav-container {
-				width: 7rem;
+				display: none;
 			}
 			.content-container {
-				width: calc(100% - 5rem);
+				width: 100%;
 			}
-		</style>	
+			@media screen and (min-width: 768px) {
+				.nav-container {
+					display: block;
+					width: 7rem;
+				}
+				.content-container {
+					width: calc(100% - 5rem);
+				}
+
+			}
+
+		</style>
   </body>
 </html>

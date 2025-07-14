@@ -1,0 +1,56 @@
+---
+import {Image} from 'astro:assets';
+import account_profile from '../../../public/images/icons/account_circle.svg';
+import account_profile_dark from '../../../public/images/icons/account_circle_dark.svg';
+import ThemeToggle from '../theme-toggle/theme-toggle.astro';
+---
+
+<div class="md:hidden p-4 flex flex-col">
+  <div class="flex justify-between items-center mb-2">
+    <button id="mobile-nav-toggle" class="focus:outline-none" aria-label="Open navigation">
+      <svg class="w-8 h-8 text-indigo-700 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+  <div id="mobile-nav-items" class="fixed inset-0 z-50 bg-white dark:bg-neutral-900 flex flex-col space-y-4 px-8 py-8 transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="flex justify-between items-center mb-8">
+      <button id="mobile-nav-close" class="focus:outline-none" aria-label="Close navigation">
+        <svg class="w-8 h-8 text-indigo-700 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+    <a class="block py-2 px-4 rounded hover:bg-indigo-100 dark:hover:bg-neutral-800 transition-colors text-lg font-semibold" href="/">Home</a>
+    <a class="block py-2 px-4 rounded hover:bg-indigo-100 dark:hover:bg-neutral-800 transition-colors text-lg font-semibold" href="/math">Math</a>
+    <a class="block py-2 px-4 rounded hover:bg-indigo-100 dark:hover:bg-neutral-800 transition-colors text-lg font-semibold" href="/reading">Reading</a>
+    <a class="block py-2 px-4 rounded hover:bg-indigo-100 dark:hover:bg-neutral-800 transition-colors text-lg font-semibold" href="/skills">Skills</a>
+    <div class="block py-2 px-4">
+      <ThemeToggle />
+    </div>
+    <div class="flex justify-start items-end fixed bottom-8 left-0 w-full pointer-events-none z-50 px-8">
+      <span class="dark:hidden inline-flex items-center justify-center w-16 h-16 pointer-events-auto">
+        <Image src={account_profile} width={35} alt="Profile" class="text-black dark:text-white" style="filter: none; color: inherit;" />
+      </span>
+      <span class="light:hidden inline-flex items-center justify-center w-16 h-16 pointer-events-auto">
+        <Image src={account_profile_dark} width={35} alt="Profile" class="text-black dark:text-white" style="filter: none; color: inherit;" />
+      </span>
+    </div>
+  </div>
+</div>
+<script>
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggle = document.getElementById('mobile-nav-toggle');
+      const nav = document.getElementById('mobile-nav-items');
+      const close = document.getElementById('mobile-nav-close');
+      if (toggle && nav && close) {
+        toggle.addEventListener('click', () => {
+          nav.classList.remove('translate-x-full');
+          nav.classList.add('translate-x-0');
+        });
+        close.addEventListener('click', () => {
+          nav.classList.remove('translate-x-0');
+          nav.classList.add('translate-x-full');
+        });
+      }
+    });
+  }
+</script>
+
