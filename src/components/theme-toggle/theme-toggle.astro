@@ -2,9 +2,10 @@
 import {Image} from 'astro:assets';
 import moon from '../../../public/images/icons/moon.svg';
 import sun from '../../../public/images/icons/sun.svg';
+
 ---
 
-<input type="checkbox" class="checkbox" id="theme-toggle">
+<input type="checkbox" class="checkbox" id="theme-toggle" />
 <label for="theme-toggle" class="checkbox-label">
   <Image width={15} src={moon} alt="Dark Mode" />
   <Image width={20} src={sun} alt="Light Mode" />
@@ -46,7 +47,7 @@ import sun from '../../../public/images/icons/sun.svg';
 </style>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const themeCheck = document.querySelector('#theme-toggle') as HTMLInputElement | null;
+    const themeCheck = document.getElementById('theme-toggle') as HTMLInputElement;
     const isDarkMode = localStorage.getItem('currentTheme') === 'dark';
     if (isDarkMode) {
       document.body.classList.remove('light');

@@ -4,29 +4,41 @@ import logo from '../../../public/images/wonderworm.png';
 import ThemeToggle from '../theme-toggle/theme-toggle.astro';
 import '@fontsource/silkscreen';
 import MobileNav from '../mobile-nav/mobile-nav.astro';
+
+const userAgent = Astro.request.headers.get('user-agent') || '';
+const isMobile = /mobile|android|iphone|ipad|phone/i.test(userAgent);
+
 ---
 <header>
   <Image width={50} src={logo} alt="WonderWorm Logo" />
   <div class="header-container">
     <h1 class="text-indigo-700 dark:text-indigo-300">WonderWorm</h1>
-    <div class="theme-toggle">
-      <ThemeToggle />
-    </div>
-    <div class="mobile-nav-container">
-      <MobileNav />
-    </div>
+    {!isMobile && (
+      <div class="theme-toggle">
+        <ThemeToggle client:media="(min-width: 768px)" />
+      </div>
+    )}
+    {isMobile && (
+      <div class="mobile-nav-container">
+        <MobileNav client:media="(max-width: 767px)" />
+      </div>
+    )}
   </div>
 </header>
 <style>
   .theme-toggle {
     display: none;
   }
+  .mobile-nav-container {
+    display: block;
+  }
   @media screen and (min-width: 768px) {
-    .theme-toggle {
-      display: block;
-    }
     .mobile-nav-container {
       display: none;
     }
+    .theme-toggle {
+      display: block;
+    }
+
   }
 </style>
