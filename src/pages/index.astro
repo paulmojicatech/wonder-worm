@@ -18,40 +18,17 @@ const cardCollection = [mathCard, readingCard, skillsCard];
 const mainContent = `Learning holds immense significance for the overall development of children, serving as a fundamental catalyst in shaping their future. One pivotal aspect is cognitive development, where exposure to diverse subjects stimulates critical thinking, problem-solving skills, and decision-making abilities. Beyond academic success, learning nurtures social skills by fostering communication, collaboration, and empathy through classroom interactions and group activities. It contributes to personal growth, instilling a sense of curiosity and a passion for discovery, thereby cultivating a lifelong love for learning. Furthermore, the adaptability instilled through continuous learning equips children to navigate challenges and embrace change, fostering resilience and a positive attitude toward new experiences. Creativity and innovation are nurtured, providing a platform for children to express their thoughts, ideas, and imagination. Education serves as an investment in the future, preparing children with the skills and knowledge essential for their chosen careers and opening doors to opportunities. It also plays a crucial role in cultural understanding, promoting tolerance and appreciation for diversity. Education addresses health and well-being by imparting knowledge about nutrition, exercise, and overall wellness. Ultimately, learning empowers children, boosting confidence in self-expression, informed decision-making, and active participation in their communities, thereby shaping their destinies positively.`;
 ---
 <MainLayout>
-	<div class="content-container">				
-		<article>
-			Welcome to WonderWorm, a place where learning is an exciting journey full of wonder and exploration!
-		</article>
-		<article class="main-content">
-			{mainContent}
-		</article>
-		<section class="cards">
-			{cardCollection.map(card => (
-				<div class="card-container">
-						<Card body={card.body} header={card.header} />
-					</div>
-			))}
-		</section>
-	</div>	
-	<style>		
-		.cards {
-			display: flex;
-			flex-wrap: wrap;
-			margin-top: 2rem;
-			justify-content: center;
-			width: 100%;
-		}
-		.card-container {
-			margin: 1rem;
-		}
-		Card {
-			width: 95%;
-		}
-		@media screen and (min-width: 768px) {
-			Card {
-				width: unset;
-			}
-			
-		}
-	</style>	
+  <div class="content-container max-w-5xl mx-auto px-4 py-10">
+    <article class="text-3xl md:text-4xl font-extrabold text-center text-indigo-700 dark:text-indigo-300 mb-4 drop-shadow-lg">
+      Welcome to WonderWorm, a place where learning is an exciting journey full of wonder and exploration!
+    </article>
+    <article class="text-lg md:text-xl text-center mb-10 mx-auto">
+      {mainContent}
+    </article>
+    <section class="flex flex-col md:flex-row gap-8 justify-center items-stretch">
+      {cardCollection.map(card => (
+          <Card body={card.body} header={card.header} />
+      ))}
+    </section>
+  </div>
 </MainLayout>

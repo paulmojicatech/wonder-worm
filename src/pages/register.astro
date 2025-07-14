@@ -9,118 +9,70 @@ let error: string | undefined = undefined;
 let isLoading = false;
 if (Astro.request.method === 'POST') {
   error = undefined;
-  const formData = await Astro.request.formData();  
+  const formData = await Astro.request.formData();
   if (formData.has('name')) {
     const user = {
       name: formData.get('name'),
       email: formData.get('email'),
       dateOfBirth: formData.get('dateOfBirth'),
       password: formData.get('password')
-    } as RegisterHttpPostRequest;    
+    } as RegisterHttpPostRequest;
     isLoading = true;
-    const response = await handleRegisterUser(user);    
-    if (response.isSuccess) {   
-      isLoading = false;       
+    const response = await handleRegisterUser(user);
+    if (response.isSuccess) {
+      isLoading = false;
       return Astro.redirect('/register-success');
     } else {
-      isLoading = false;    
+      isLoading = false;
       error = response.message;
     }
-  }  
+  }
 }
 
-async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {    
-    const response = await registerUser(user);      
-    return Promise.resolve(response);              
+async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
+    const response = await registerUser(user);
+    return Promise.resolve(response);
   }
 
 ---
 <MainLayout>
-  <div id="loading-container" class="hide">
+  <div id="loading-container" class="hidden">
     <Loader />
-  </div>      
-  {!isLoading && 
-    <div class="content-container">        
-      <h2>Register to start learning!</h2>
-      <form id="register-form" method="POST">
-        <fieldset>
-          <div class="form-container">            
-            <label for="name">Parent Name:*</label>
-            <input type="text" id="name" name="name" required/>                           
-            <label for="email">Email:*</label>
-            <input type="email" id="email" name="email" required/>                                      
-            <label for="dateOfBirth">Birthday(mm/dd/yyyy):*</label>
-            <input type="text" id="dateOfBirth" name="dateOfBirth" required/>
-            <div id="birthday-error" class="error hide"></div>
-            <label for="password">Password:*</label>
-            <input type="password" id="password" name="password" required/>              
-            <label for="confirmPassword">Confirm Password:*</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required/>      
-            <div id="error-section" class="error hide">
-            </div>
-          </div>        
+  </div>
+  {!isLoading &&
+    <div class="flex flex-col items-center justify-center min-h-[60vh]">
+      <h2 class="text-2xl font-bold mb-6 text-indigo-700">Register to start learning!</h2>
+      <form id="register-form" method="POST" class="w-full max-w-md bg-white rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
+        <fieldset class="flex flex-col gap-4">
+          <label for="name" class="font-semibold">Parent Name:*</label>
+          <input type="text" id="name" name="name" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+          <label for="email" class="font-semibold">Email:*</label>
+          <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+          <label for="dateOfBirth" class="font-semibold">Birthday (mm/dd/yyyy):*</label>
+          <input type="text" id="dateOfBirth" name="dateOfBirth" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+          <div id="birthday-error" class="text-red-600 text-sm hidden"></div>
+          <label for="password" class="font-semibold">Password:*</label>
+          <input type="password" id="password" name="password" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+          <label for="confirmPassword" class="font-semibold">Confirm Password:*</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+          <div id="error-section" class="text-red-600 text-sm hidden"></div>
         </fieldset>
-        <div class="actions">
-          <button disabled id="registerBtn" class="primary" type="submit">Register</button>
-          <span>Already have an account? <a href="/login">Login</a></span>
-        </div>                    
-      </form>     
-      {error && <div class="error">{error}</div>}    
-    </div>            
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors mt-4">Register</button>
+        {error && <div class="text-red-600 text-sm mt-2">{error}</div>}
+      </form>
+    </div>
   }
-  <style>
-    .form-container {
-      display: flex;
-      flex-direction: column;      
-      gap: .5rem; 
-      width: 100%;
-      flex-wrap: wrap;
-    }
-    fieldset {
-      border-radius: 0.5rem;
-      padding: 0.5rem;
-    }
-    @media screen and (min-width: 768px) {
-      form {
-        width: 50%
-      }
-      
-    }
-    .hide {
-      display: none;
-    }
-    .actions {
-      margin: 1rem 0;
-      display: flex;
-      flex-direction: column;
-    }
-    .actions > span {
-      margin-top: .25rem;
-    }
-    #loading-container {      
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
-    }
-    .show {
-      display: flex;
-    }
-    .hide {
-      display: none;
-    }
-  </style>  
-  <script>    
+  <script>
     import { Subject, debounceTime, fromEvent, merge, takeUntil } from 'rxjs';
     const onDesstroySub$ = new Subject<void>();
-    window.addEventListener('beforeunload', () => {      
+    window.addEventListener('beforeunload', () => {
       onDesstroySub$.next();
     });
     const formEl = document.querySelector('form') as HTMLFormElement;
 
     // birthday validation
     const birthdayEl = document.querySelector('#dateOfBirth') as HTMLInputElement;
-    const birthdayErrorEl = document.querySelector('#birthday-error') as HTMLDivElement;    
+    const birthdayErrorEl = document.querySelector('#birthday-error') as HTMLDivElement;
 
     fromEvent(birthdayEl, 'keyup').pipe(debounceTime(50), takeUntil(onDesstroySub$)).subscribe(() => {
       validateBirthdayInput(birthdayEl, birthdayErrorEl);
@@ -147,9 +99,9 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       }
     });
 
-    // form validation    
-    const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;    
-    registerBtn.addEventListener('click', () => {      
+    // form validation
+    const registerBtn = document.querySelector('#registerBtn') as HTMLButtonElement;
+    registerBtn.addEventListener('click', () => {
       const loadingContainer = document.querySelector('#loading-container') as HTMLDivElement;
       const contentContainer = document.querySelector('.content-container') as HTMLDivElement;
       loadingContainer.classList.remove('hide');
@@ -158,7 +110,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       contentContainer.classList.add('hide');
     });
 
-    fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {          
+    fromEvent(formEl, 'change').pipe(takeUntil(onDesstroySub$)).subscribe(() => {
       if (formEl.checkValidity()) {
         registerBtn.disabled = false;
       } else {
@@ -171,28 +123,28 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
       const confirmPassword = confirmPasswordEl.value;
       const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
       const isConfirmValid = password === confirmPassword;
-      
+
       let errorMessage = '';
       const isValid = pattern.test(password) && isConfirmValid;
       if (!isValid) {
-        if (!pattern.test(password)) {          
+        if (!pattern.test(password)) {
           errorSection.classList.remove('hide');
           errorMessage = 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number';
           passwordEl.setCustomValidity(errorMessage);
-          errorSection.innerHTML = errorMessage;          
+          errorSection.innerHTML = errorMessage;
         } else if (!isConfirmValid) {
           errorSection.classList.remove('hide');
           errorMessage = 'Passwords do not match';
           confirmPasswordEl.setCustomValidity(errorMessage);
           errorSection.innerHTML = errorMessage;
-        }           
+        }
       } else {
         const errorSection = document.querySelector('#error-section') as HTMLDivElement;
         errorSection.classList.add('hide');
         errorMessage = '';
         passwordEl.setCustomValidity(errorMessage);
         confirmPasswordEl.setCustomValidity(errorMessage);
-      }         
+      }
     }
 
     function validateBirthdayInput(birthdayEl: HTMLInputElement, errorSectionEl: HTMLDivElement): void {
@@ -208,7 +160,7 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
         errorSectionEl.classList.add('hide');
         errorMessage = '';
         birthdayEl.setCustomValidity(errorMessage);
-      }      
-    }    
+      }
+    }
   </script>
 </MainLayout>

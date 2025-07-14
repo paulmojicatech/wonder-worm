@@ -3,13 +3,30 @@ import {Image} from 'astro:assets';
 import logo from '../../../public/images/wonderworm.png';
 import ThemeToggle from '../theme-toggle/theme-toggle.astro';
 import '@fontsource/silkscreen';
+import MobileNav from '../mobile-nav/mobile-nav.astro';
 ---
 <header>
   <Image width={50} src={logo} alt="WonderWorm Logo" />
   <div class="header-container">
-    <h1>WonderWorm</h1>
+    <h1 class="text-indigo-700 dark:text-indigo-300">WonderWorm</h1>
     <div class="theme-toggle">
       <ThemeToggle />
     </div>
-  </div>			
-</header>	
+    <div class="mobile-nav-container">
+      <MobileNav />
+    </div>
+  </div>
+</header>
+<style>
+  .theme-toggle {
+    display: none;
+  }
+  @media screen and (min-width: 768px) {
+    .theme-toggle {
+      display: block;
+    }
+    .mobile-nav-container {
+      display: none;
+    }
+  }
+</style>

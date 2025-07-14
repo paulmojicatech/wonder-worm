@@ -3,15 +3,9 @@ import MainLayout from '../layouts/main-layout.astro';
 ---
 
 <MainLayout>
-	<div class="content-container">				
-    <article>
-      Thank you for registering! Please go to <a class="login-link" href="/login">login</a> to start learning.
+  <div class="flex flex-col items-center justify-center min-h-[60vh]">
+    <article class="bg-white rounded-xl shadow-md p-8 border border-gray-100 text-center max-w-lg">
+      Thank you for registering! Please go to <a class="text-indigo-600 hover:underline" href="/login">login</a> to start learning.
     </article>
-	</div>
+  </div>
 </MainLayout>
-<style>	
-  .login-link {
-    color: #007bff;
-    text-decoration: none;
-  }
-</style>
