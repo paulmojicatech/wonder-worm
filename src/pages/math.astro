@@ -1,17 +1,31 @@
 ---
 import '@fontsource-variable/montserrat';
 import MainLayout from '../layouts/main-layout.astro';
+import Card from '../components/card/card.astro';
 import '../styles/global.css';
 
 const user = Astro.cookies.get('user');
 if (!user) {
 	console.log('Redirecting to register page');
-	return Astro.redirect('/login');
+	return Astro.redirect('/register');
+}
+
+let isLoading = false;
+
+if (Astro.request.method === 'POST') {
+	isLoading = true;
+	return Astro.redirect('/simple-addition');
 }
 
 ---
 <MainLayout>
-  <div class="flex flex-col items-center justify-center min-h-[60vh]">
-    <span class="text-2xl font-bold text-gray-600">Coming Soon!</span>
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-8">
+    <Card header="Rapid Fire Addition" body="Practice simple addition problems with numbers up to 2 digits. Strengthen your basic math skills with fun and easy exercises!">
+      <div class="flex w-full justify-end mt-4" slot="actionSlot">
+        <form method="POST">
+          <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors" type="submit">Start</button>
+        </form>
+      </div>
+    </Card>
   </div>
 </MainLayout>

@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import node from "@astrojs/node";
 import tailwindcss from "@tailwindcss/vite";
+import react from '@astrojs/react';
 
 import analogjsangular from "@analogjs/astro-angular";
 
@@ -13,5 +14,5 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [analogjsangular()]
+  integrations: [react(), analogjsangular()]
 });
