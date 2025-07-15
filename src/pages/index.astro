@@ -4,15 +4,19 @@ import MainLayout from '../layouts/main-layout.astro';
 
 const mathCard = {
 	header: 'Math',
-	body: `Search for games to make learning math fun for kids. We have a variety of games that will help kids learn and practice counting, addition, subtraction, multiplication, division, fractions, decimals, and more!`
+	body: `Search for games to make learning math fun for kids. We have a variety of games that will help kids learn and practice counting, addition, subtraction, multiplication, division, fractions, decimals, and more!`,
+  link: '/math'
+
 };
 const readingCard = {
 	header: 'Reading',
-	body: `Search for games to make learning reading fun for kids. We have a variety of games that will help kids learn and practice their reading and comprehension skills.`
+	body: `Search for games to make learning reading fun for kids. We have a variety of games that will help kids learn and practice their reading and comprehension skills.`,
+	link: '/reading'
 };
 const skillsCard = {
 	header: 'Skills',
-	body: `Teaches skills that kids need to succeed in school and beyond. We have a variety of games that will help kids learn and practice their memory, typing, as well as the skills they need to succeed in school and beyond.`
+	body: `Teaches skills that kids need to succeed in school and beyond. We have a variety of games that will help kids learn and practice their memory, typing, as well as the skills they need to succeed in school and beyond.`,
+	link: '/skills'
 };
 const cardCollection = [mathCard, readingCard, skillsCard];
 const mainContent = `Learning holds immense significance for the overall development of children, serving as a fundamental catalyst in shaping their future. One pivotal aspect is cognitive development, where exposure to diverse subjects stimulates critical thinking, problem-solving skills, and decision-making abilities. Beyond academic success, learning nurtures social skills by fostering communication, collaboration, and empathy through classroom interactions and group activities. It contributes to personal growth, instilling a sense of curiosity and a passion for discovery, thereby cultivating a lifelong love for learning. Furthermore, the adaptability instilled through continuous learning equips children to navigate challenges and embrace change, fostering resilience and a positive attitude toward new experiences. Creativity and innovation are nurtured, providing a platform for children to express their thoughts, ideas, and imagination. Education serves as an investment in the future, preparing children with the skills and knowledge essential for their chosen careers and opening doors to opportunities. It also plays a crucial role in cultural understanding, promoting tolerance and appreciation for diversity. Education addresses health and well-being by imparting knowledge about nutrition, exercise, and overall wellness. Ultimately, learning empowers children, boosting confidence in self-expression, informed decision-making, and active participation in their communities, thereby shaping their destinies positively.`;
@@ -27,7 +31,9 @@ const mainContent = `Learning holds immense significance for the overall develop
     </article>
     <section class="flex flex-col md:flex-row gap-8 justify-center items-stretch">
       {cardCollection.map(card => (
+        <a href={card.link} class="transition-transform duration-200 hover:scale-105 focus:scale-105 block">
           <Card body={card.body} header={card.header} />
+        </a>
       ))}
     </section>
   </div>
