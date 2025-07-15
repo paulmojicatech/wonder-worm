@@ -1,6 +1,6 @@
 ---
 import MainLayout from '../layouts/main-layout.astro';
-
+import RapidFireAddition from '../components/rapid-fire-addition/RapidFireAddition.jsx';
 
 const user = Astro.cookies.get('user');
 if (!user) {
@@ -15,4 +15,7 @@ if (!user) {
   <p class="text-lg md:text-xl text-gray-700 dark:text-gray-200 mb-8">
     Get ready for Rapid Fire Addition! You have 1 minute to solve as many simple addition problems as you can. Each question will have two numbers (up to 2 digits each). Type your answer and hit enter—if you get it right, zoom to the next one! Try to beat your high score and become the Addition Ace! Can you answer more than your friends? Let’s see how fast your brain can add!
   </p>
+  <div class="flex flex-col items-center justify-center min-h-[60vh]">
+    <RapidFireAddition client:load />
+  </div>
 </MainLayout>

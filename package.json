@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "wonder-worm-ui",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -25,10 +25,13 @@
     "@angular/platform-server": "^18.0.4",
     "@astrojs/check": "^0.3.4",
     "@astrojs/node": "^8.2.3",
+    "@astrojs/react": "^4.3.0",
     "@fontsource-variable/montserrat": "^5.0.17",
     "@fontsource/silkscreen": "^5.0.18",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^4.0.8",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "rxjs": "^7.8.1",
     "tailwindcss": "^4.1.11",
     "tslib": "^2.6.3",
