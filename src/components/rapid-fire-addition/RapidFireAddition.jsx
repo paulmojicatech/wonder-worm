@@ -9,6 +9,7 @@ export default function RapidFireAddition() {
   const [shake, setShake] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const timerId = useRef(null);
+  const inputRef = useRef(null);
 
   function generateProblem() {
     const a = Math.floor(Math.random() * 90) + 10;
@@ -24,6 +25,7 @@ export default function RapidFireAddition() {
     setAnswer('');
     setShake(false);
     setShowCheck(false);
+    setTimeout(() => inputRef.current && inputRef.current.focus(), 0);
   }
 
   function handleAnswer(e) {
@@ -39,6 +41,7 @@ export default function RapidFireAddition() {
       setShake(true);
       setTimeout(() => setShake(false), 400);
     }
+    setTimeout(() => inputRef.current && inputRef.current.focus(), 0);
   }
 
   useEffect(() => {
@@ -105,8 +108,10 @@ export default function RapidFireAddition() {
       <div className="flex flex-col items-center gap-4">
         {style}
         <div className={cardClass}>
+          <span className="text-2xl font-bold text-indigo-700 dark:text-indigo-300 mb-4">Ready...</span>
+          <span className="text-2xl font-bold text-indigo-700 dark:text-indigo-300 mb-4">Set...</span>
           <button className={buttonClass} onClick={startGame}>
-            Start Rapid Fire Addition
+            Go!
           </button>
         </div>
       </div>
@@ -146,7 +151,8 @@ export default function RapidFireAddition() {
         </div>
         <form onSubmit={handleAnswer} className="flex gap-3 w-full justify-center mb-2">
           <input
-            type="number"
+            ref={inputRef}
+            type="tel"
             className={inputClass}
             value={answer}
             onChange={e => setAnswer(e.target.value)}

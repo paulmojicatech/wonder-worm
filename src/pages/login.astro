@@ -37,7 +37,7 @@ async function handleSubmit(userEmail: string, password: string): Promise<boolea
       <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
       <label for="password" class="font-semibold">Password:</label>
       <input type="password" id="password" name="password" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-      <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Submit</button>
+      <button id="loginBtn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Submit</button>
 			<div class="mt-4 text-center">
       <p>Don't have an account? <a href="/register">
 				<span class="text-indigo-700 dark:text-indigo-300 hover:underline">Register</span>
@@ -45,4 +45,17 @@ async function handleSubmit(userEmail: string, password: string): Promise<boolea
     </div>
     </form>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('#loginForm') as HTMLFormElement;
+      const btn = document.querySelector('#loginBtn') as HTMLButtonElement;
+      if (form && btn) {
+        form.addEventListener('submit', function () {
+          btn.textContent = 'Signing In...';
+          btn.disabled = true;
+          btn.classList.add('opacity-60', 'cursor-not-allowed');
+        });
+      }
+    });
+  </script>
 </MainLayout>
