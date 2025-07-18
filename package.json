@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "package-app": "docker build -t paulmojicatech/astro-wonder-worm-ui --platform linux/amd64 -f .dockerfile . && docker push paulmojicatech/astro-wonder-worm-ui",
-    "run-docker": "docker build -t paulmojicatech/astro-wonder-worm-ui -f .dockerfile . && docker run -p 4321:4321 -d paulmojicatech/astro-wonder-worm-ui"
+    "run-docker": "docker build -t paulmojicatech/astro-wonder-worm-ui -f .dockerfile . && docker run -p 4321:4321 -d paulmojicatech/astro-wonder-worm-ui",
+    "test": "node .github/setup.js"
   },
   "dependencies": {
     "@analogjs/astro-angular": "^1.5.0",
@@ -19,8 +20,9 @@
     "@angular/compiler": "^18.0.4",
     "@angular/compiler-cli": "^18.0.4",
     "@angular/core": "^18.0.4",
+    "@angular/elements": "^20.1.6",
     "@angular/language-service": "^18.0.4",
-    "@angular/platform-browser": "^18.0.4",
+    "@angular/platform-browser": "^18.2.13",
     "@angular/platform-browser-dynamic": "^18.0.4",
     "@angular/platform-server": "^18.0.4",
     "@astrojs/check": "^0.3.4",
