@@ -13,19 +13,39 @@ if (!user) {
 let isLoading = false;
 
 if (Astro.request.method === 'POST') {
-	isLoading = true;
-	return Astro.redirect('/simple-addition');
+  const formData = await Astro.request.formData();
+  const game = formData.get('game');
+
+  if (game === 'beginner') {
+    return Astro.redirect('/simple-addition?game=beginner');
+  } else if (game === 'rapid-fire') {
+    return Astro.redirect('/simple-addition?game=rapid-fire');
+  }
 }
 
 ---
 <MainLayout>
   <div class="flex flex-col items-center justify-center min-h-[60vh] gap-8">
-    <Card header="Rapid Fire Addition" body="Practice simple addition problems with numbers up to 2 digits. Strengthen your basic math skills with fun and easy exercises!">
-      <div class="flex w-full justify-end mt-4" slot="actionSlot">
-        <form method="POST">
-          <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors" type="submit">Start</button>
-        </form>
-      </div>
-    </Card>
+    <div class="w-full max-w-md">
+      <Card header="Beginner's Math" body="Perfect for young learners! Practice simple addition using single digit numbers (1-9). Build confidence with basic math skills through fun and easy exercises designed for beginners.">
+        <div class="flex w-full justify-end mt-4" slot="actionSlot">
+          <form method="POST">
+            <input type="hidden" name="game" value="beginner" />
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Start</button>
+          </form>
+        </div>
+      </Card>
+    </div>
+
+    <div class="w-full max-w-md">
+      <Card header="Rapid Fire Addition" body="Practice simple addition problems with numbers up to 2 digits. Strengthen your basic math skills with fun and easy exercises for intermediate learners!">
+        <div class="flex w-full justify-end mt-4" slot="actionSlot">
+          <form method="POST">
+            <input type="hidden" name="game" value="rapid-fire" />
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Start</button>
+          </form>
+        </div>
+      </Card>
+    </div>
   </div>
 </MainLayout>
