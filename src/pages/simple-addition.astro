@@ -8,14 +8,17 @@ if (!user) {
 	return Astro.redirect('/register');
 }
 
+// Get the game query parameter
+const game = Astro.url.searchParams.get('game') || 'rapid-fire';
+
 ---
 
 <MainLayout>
   <h2 class="text-3xl font-extrabold text-indigo-700 dark:text-indigo-300 mb-4">Rapid Fire Addition</h2>
   <p class="text-lg md:text-xl text-gray-700 dark:text-gray-200 mb-8">
-    Get ready for Rapid Fire Addition! You have 1 minute to solve as many simple addition problems as you can. Each question will have two numbers (up to 2 digits each). Type your answer and hit enter—if you get it right, zoom to the next one! Try to beat your high score and become the Addition Ace! Can you answer more than your friends? Let’s see how fast your brain can add!
+    Get ready for Rapid Fire Addition! You have 1 minute to solve as many simple addition problems as you can. Each question will have two numbers (up to 2 digits each). Type your answer and hit enter—if you get it right, zoom to the next one! Try to beat your high score and become the Addition Ace! Can you answer more than your friends? Let's see how fast your brain can add!
   </p>
   <div class="flex flex-col items-center justify-center min-h-[60vh]">
-    <RapidFireAddition client:load />
+    <RapidFireAddition client:load game={game} />
   </div>
 </MainLayout>

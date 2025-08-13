@@ -1,27 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function RapidFireAddition() {
+export default function RapidFireAddition({ game = 'rapid-fire' }) {
   const [started, setStarted] = useState(false);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
-  const [problem, setProblem] = useState(generateProblem());
+  const [problem, setProblem] = useState(generateProblem(game));
   const [answer, setAnswer] = useState('');
   const [shake, setShake] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const timerId = useRef(null);
   const inputRef = useRef(null);
 
-  function generateProblem() {
-    const a = Math.floor(Math.random() * 90) + 10;
-    const b = Math.floor(Math.random() * 90) + 10;
-    return { a, b };
+  function generateProblem(gameType = game) {
+    if (gameType === 'beginner') {
+      // Single digit numbers for beginner mode
+      const a = Math.floor(Math.random() * 9) + 1;
+      const b = Math.floor(Math.random() * 9) + 1;
+      return { a, b };
+    } else {
+      // Default rapid-fire mode with 2-digit numbers
+      const a = Math.floor(Math.random() * 90) + 10;
+      const b = Math.floor(Math.random() * 90) + 10;
+      return { a, b };
+    }
   }
 
   function startGame() {
     setStarted(true);
     setScore(0);
     setTimeLeft(60);
-    setProblem(generateProblem());
+    setProblem(generateProblem(game));
     setAnswer('');
     setShake(false);
     setShowCheck(false);
@@ -35,7 +43,7 @@ export default function RapidFireAddition() {
       setShowCheck(true);
       setTimeout(() => setShowCheck(false), 600);
       setShake(false);
-      setProblem(generateProblem());
+      setProblem(generateProblem(game));
       setAnswer('');
     } else {
       setShake(true);
