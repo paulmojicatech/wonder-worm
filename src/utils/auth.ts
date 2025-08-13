@@ -1,5 +1,35 @@
 import type { LoginHttpPostRequest, RegisterHttpPostRequest, User } from '../models/auth/auth.interface';
 
+export async function googleLogin(credential: string): Promise<User & {isSuccess: boolean} | { isSuccess: boolean }> {
+  const url = 'https://tv5zym6bmx3cdif7z33tnztzdm0kjmyd.lambda-url.us-east-1.on.aws/auth/google-login';
+
+  try {
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'},
+      body: JSON.stringify({ credential }),
+    }
+    const response = await fetch(url, options);
+    const isSuccess = response.ok;
+    if (!isSuccess) {
+      console.error('Error logging in with Google', await response.json());
+      return Promise.resolve({isSuccess: false});
+    }
+    const data = await response.json();
+    const user: User = {
+      userName: data.name,
+      lastLoggedIn: new Date().toISOString(),
+      email: data.email,
+      token: data.token,
+      children: data.children ?? [],
+    };
+    return Promise.resolve({...user, isSuccess: isSuccess});
+  } catch (error) {
+    console.error('Error logging in with Google', error);
+    return Promise.resolve({isSuccess: false});
+  }
+}
+
 
 export function getCurrentUser(): User | undefined {
   if (localStorage?.getItem('currentUser')) {
@@ -14,15 +44,15 @@ export async function registerUser(user: RegisterHttpPostRequest): Promise<{isSu
   try {
     const options = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'},      
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'},
       body: JSON.stringify(user),
     }
     const response = await fetch(url, options);
     const isSuccess = response.ok;
     const message = !isSuccess ? await response.json() : '';
     return Promise.resolve({isSuccess, message});
-  } catch (error) { 
-    console.error('Error registering user', error);   
+  } catch (error) {
+    console.error('Error registering user', error);
     return Promise.resolve({isSuccess: false, message: 'Error registering user'});
   }
 }
