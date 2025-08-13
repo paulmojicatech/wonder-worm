@@ -3,7 +3,7 @@ import '@fontsource-variable/montserrat';
 import MainLayout from '../layouts/main-layout.astro';
 import '../styles/global.css';
 import '../styles/spacing.css';
-import { login } from '../utils/auth';
+import { login, googleLogin } from '../utils/auth';
 
 if (Astro.request.method === 'POST') {
 	const formData = await Astro.request.formData();
@@ -13,6 +13,17 @@ if (Astro.request.method === 'POST') {
 		const isSuccess = await handleSubmit(`${email}`, `${password}`);
 		if (!isSuccess) {
 			console.error('Login failed');
+		} else {
+			return Astro.redirect('/');
+		}
+	}
+
+	// Handle Google login
+	if (formData.has('credential')) {
+		const credential = formData.get('credential');
+		const isSuccess = await handleGoogleSubmit(`${credential}`);
+		if (!isSuccess) {
+			console.error('Google login failed');
 		} else {
 			return Astro.redirect('/');
 		}
@@ -28,24 +39,93 @@ async function handleSubmit(userEmail: string, password: string): Promise<boolea
 	return loginResp.isSuccess;
 }
 
+async function handleGoogleSubmit(credential: string): Promise<boolean> {
+	const loginResp = await googleLogin(credential);
+  console.group(loginResp);
+	if (loginResp.isSuccess) {
+		const {isSuccess, ...user} = loginResp;
+		Astro.cookies.set('user', JSON.stringify(user));
+	}
+	return loginResp.isSuccess;
+}
+
 ---
 
 <MainLayout>
   <div class="flex flex-col items-center justify-center min-h-[60vh]">
-    <form id="loginForm" method="POST" class="w-full max-w-sm bg-white text-[#1e1e1e] rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
-      <label for="email" class="font-semibold">Email:</label>
-      <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-      <label for="password" class="font-semibold">Password:</label>
-      <input type="password" id="password" name="password" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-      <button id="loginBtn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Submit</button>
+    <div class="w-full max-w-sm bg-white text-[#1e1e1e] rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
+
+      <!-- Google Sign-In Button -->
+      <div class="mb-4">
+        <div id="g_id_onload"
+             data-client_id="702051664956-gkk4m30vcn7929eljj8811r01teqdqho.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleGoogleSignIn"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left"
+             data-width="100%">
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="flex items-center my-4">
+        <div class="flex-grow border-t border-gray-300"></div>
+        <span class="px-4 text-sm text-gray-500">or</span>
+        <div class="flex-grow border-t border-gray-300"></div>
+      </div>
+
+      <!-- Regular Login Form -->
+      <form id="loginForm" method="POST" class="flex flex-col gap-4">
+        <label for="email" class="font-semibold">Email:</label>
+        <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <label for="password" class="font-semibold">Password:</label>
+        <input type="password" id="password" name="password" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <button id="loginBtn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Submit</button>
+      </form>
+
+      <!-- Hidden form for Google Sign-In -->
+      <form id="googleForm" method="POST" style="display: none;">
+        <input type="hidden" id="googleCredential" name="credential" />
+      </form>
+
 			<div class="mt-4 text-center">
-      <p>Don't have an account? <a href="/register">
-				<span class="text-indigo-700 dark:text-indigo-300 hover:underline">Register</span>
-			</a></p>
+        <p>Don't have an account? <a href="/register">
+				  <span class="text-indigo-700 dark:text-indigo-300 hover:underline">Register</span>
+			  </a></p>
+      </div>
     </div>
-    </form>
   </div>
+  <!-- Google Sign-In Script -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <script>
+    // Google Sign-In callback function
+    function handleGoogleSignIn(response: any) {
+      const credential = response.credential;
+      const googleForm = document.getElementById('googleForm') as HTMLFormElement;
+      const credentialInput = document.getElementById('googleCredential') as HTMLInputElement;
+      const btn = document.querySelector('#loginBtn') as HTMLButtonElement;
+
+      if (googleForm && credentialInput) {
+        credentialInput.value = credential;
+        btn.textContent = 'Signing In...';
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+        googleForm.submit();
+      }
+    }
+
+    // Make the function globally available
+    (window as any).handleGoogleSignIn = handleGoogleSignIn;
+
     document.addEventListener('DOMContentLoaded', function () {
       const form = document.querySelector('#loginForm') as HTMLFormElement;
       const btn = document.querySelector('#loginBtn') as HTMLButtonElement;

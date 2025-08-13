@@ -3,13 +3,29 @@ import Loader from '../components/loader/loader.astro';
 import MainLayout from '../layouts/main-layout.astro';
 import type { RegisterHttpPostRequest } from '../models/auth/auth.interface';
 import '../styles/global.css';
-import { registerUser } from '../utils/auth';
+import { registerUser, googleLogin } from '../utils/auth';
 
 let error: string | undefined = undefined;
 let isLoading = false;
 if (Astro.request.method === 'POST') {
   error = undefined;
   const formData = await Astro.request.formData();
+
+  // Handle Google Sign-In (which acts as both login and registration)
+  if (formData.has('credential')) {
+    const credential = formData.get('credential');
+    isLoading = true;
+    const response = await handleGoogleSignIn(`${credential}`);
+    if (response.isSuccess) {
+      isLoading = false;
+      return Astro.redirect('/');
+    } else {
+      isLoading = false;
+      error = 'Google sign-in failed. Please try again.';
+    }
+  }
+
+  // Handle regular registration
   if (formData.has('name')) {
     const user = {
       name: formData.get('name'),
@@ -32,7 +48,16 @@ if (Astro.request.method === 'POST') {
 async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuccess: boolean, message: string}> {
     const response = await registerUser(user);
     return Promise.resolve(response);
+}
+
+async function handleGoogleSignIn(credential: string): Promise<{isSuccess: boolean}> {
+  const response = await googleLogin(credential);
+  if (response.isSuccess) {
+    const {isSuccess, ...user} = response;
+    Astro.cookies.set('user', JSON.stringify(user));
   }
+  return {isSuccess: response.isSuccess};
+}
 
 ---
 <MainLayout>
@@ -42,12 +67,43 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
   {!isLoading &&
     <div class="flex flex-col items-center justify-center min-h-[60vh] text-[#1a1a1a]">
       <h2 class="text-2xl font-bold mb-6 text-indigo-700 dark:text-indigo-300">Register to start learning!</h2>
-      <form id="register-form" method="POST" class="w-full max-w-md bg-white rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
-        <fieldset class="flex flex-col gap-4">
-          <label for="name" class="font-semibold">Parent Name:*</label>
-          <input type="text" id="name" name="name" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-          <label for="email" class="font-semibold">Email:*</label>
-          <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+
+      <div class="w-full max-w-md bg-white rounded-xl shadow-md p-8 flex flex-col gap-4 border border-gray-100">
+
+        <!-- Google Sign-In Button -->
+        <div class="mb-4">
+          <div id="g_id_onload"
+               data-client_id="702051664956-gkk4m30vcn7929eljj8811r01teqdqho.apps.googleusercontent.com"
+               data-context="signup"
+               data-ux_mode="popup"
+               data-callback="handleGoogleSignUp"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-shape="rectangular"
+               data-theme="outline"
+               data-text="signup_with"
+               data-size="large"
+               data-logo_alignment="left"
+               data-width="100%">
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t border-gray-300"></div>
+          <span class="px-4 text-sm text-gray-500">or</span>
+          <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <!-- Regular Registration Form -->
+        <form id="register-form" method="POST" class="flex flex-col gap-4">
+          <fieldset class="flex flex-col gap-4">
+            <label for="name" class="font-semibold">Parent Name:*</label>
+            <input type="text" id="name" name="name" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label for="email" class="font-semibold">Email:*</label>
+            <input type="email" id="email" name="email" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
           <label for="dateOfBirth" class="font-semibold">Birthday (mm/dd/yyyy):*</label>
           <input type="text" id="dateOfBirth" name="dateOfBirth" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
           <div id="birthday-error" class="text-red-600 text-sm hidden"></div>
@@ -57,18 +113,46 @@ async function handleRegisterUser(user: RegisterHttpPostRequest): Promise<{isSuc
           <input type="password" id="confirmPassword" name="confirmPassword" required class="input input-bordered rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
           <div id="error-section" class="text-red-600 text-sm hidden"></div>
         </fieldset>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors mt-4">Register</button>
+        <button id="registerBtn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors mt-4">Register</button>
         {error && <div class="text-red-600 text-sm mt-2">{error}</div>}
+        </form>
+
+        <!-- Hidden form for Google Sign-In -->
+        <form id="googleForm" method="POST" style="display: none;">
+          <input type="hidden" id="googleCredential" name="credential" />
+        </form>
+
         <div class="mt-4 text-center">
-        <span>Already registered?</span>
-        <a href="/login" class="font-semibold ml-1">
-          <span class="text-indigo-700 dark:text-indigo-300 hover:underline">Sign in here</span>
-        </a>
+          <span>Already registered?</span>
+          <a href="/login" class="font-semibold ml-1">
+            <span class="text-indigo-700 dark:text-indigo-300 hover:underline">Sign in here</span>
+          </a>
+        </div>
       </div>
-      </form>
 
     </div>
   }
+
+  <!-- Google Sign-In Script -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <script>
+    // Google Sign-In callback function
+    function handleGoogleSignUp(response: any) {
+      const credential = response.credential;
+      const googleForm = document.getElementById('googleForm') as HTMLFormElement;
+      const credentialInput = document.getElementById('googleCredential') as HTMLInputElement;
+
+      if (googleForm && credentialInput) {
+        credentialInput.value = credential;
+        googleForm.submit();
+      }
+    }
+
+    // Make the function globally available
+    (window as any).handleGoogleSignUp = handleGoogleSignUp;
+  </script>
+
   <script>
     import { Subject, debounceTime, fromEvent, merge, takeUntil } from 'rxjs';
     const onDesstroySub$ = new Subject<void>();
