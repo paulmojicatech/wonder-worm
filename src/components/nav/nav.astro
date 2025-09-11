@@ -1,18 +1,28 @@
 ---
 import {Image} from 'astro:assets';
+import Profile from '../profile/profile.astro';
 import account_profile from '../../../public/images/icons/account_circle.svg';
 import '../../styles/spacing.css';
+
+const user = Astro.cookies.get('user');
 ---
 <div class="nav-container">
-  <div class="main-nav-items">
+  <div class="main-nav-items show" id="mainNavItemsDiv">
     <a class="mb-1rem" href="/">Home</a>
     <a class="mb-1rem" href="/math">Math</a>
     <a class="mb-1rem" href="/reading">Reading</a>
     <a href="/skills">Skills</a>
   </div>
-  <div class="account">
-    <Image src={account_profile} width={35} alt="Profile" />
+  <div class="account show" id="accountDiv">
+    {user && <button id="profile-button" class="bg-transparent border-0">
+      <Image src={account_profile} width={35} alt="Profile" />
+    </button>}
+    {!user && <a href="/login">
+      <Image src={account_profile} width={35} alt="Login" />
+    </a>}
   </div>
+  <div id="profileDiv" class="hide">
+    {user && <Profile />}
 </div>
 <style>
   .nav-container {
@@ -22,6 +32,9 @@ import '../../styles/spacing.css';
     height: 100%;
     background-color: #f2f2f2;
     padding: 1rem;
+    &:has(#profileDiv.show) {
+      width: 20vw;
+    }
   }
   .main-nav-items {
     display: flex;
@@ -42,4 +55,62 @@ import '../../styles/spacing.css';
   :first-of-type a{
     padding-top: 0;
   }
+  .show {
+    display: block;
+  }
+  .hide {
+    display: none;
+  }
+
+  #profileDiv {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  #profileDiv.show {
+    transform: translateX(0);
+  }
+
+  #profileDiv.slide-in {
+    animation: slideInFromLeft 0.3s ease-in-out forwards;
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 </style>
+<script>
+  const profileButton = document.getElementById('profile-button');
+
+  if (profileButton) {
+    profileButton.addEventListener('click', () => {
+      const profileDiv = document.querySelector('#profileDiv');
+      const mainNavItemsDiv = document.querySelector('#mainNavItemsDiv');
+      const accountDiv = document.querySelector('#accountDiv');
+
+      if (profileDiv) {
+        // Hide other elements
+        mainNavItemsDiv?.classList.remove('show');
+        mainNavItemsDiv?.classList.add('hide');
+        accountDiv?.classList.remove('show');
+        accountDiv?.classList.add('hide');
+
+        // Show profile div with left-to-right animation
+        profileDiv.classList.remove('hide');
+        profileDiv.classList.add('show', 'slide-in');
+
+        // Remove animation class after animation completes
+        setTimeout(() => {
+          profileDiv.classList.remove('slide-in');
+        }, 300);
+      }
+    });
+  }
+</script>
