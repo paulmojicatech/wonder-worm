@@ -20,6 +20,10 @@ if (Astro.request.method === 'POST') {
     return Astro.redirect('/simple-addition?game=beginner');
   } else if (game === 'rapid-fire') {
     return Astro.redirect('/simple-addition?game=rapid-fire');
+  } else if (game === 'multiplication-table') {
+    return Astro.redirect('/multiplication-table');
+  } else {
+    console.error('Unknown game type:', game);
   }
 }
 
@@ -42,6 +46,17 @@ if (Astro.request.method === 'POST') {
         <div class="flex w-full justify-end mt-4" slot="actionSlot">
           <form method="POST">
             <input type="hidden" name="game" value="rapid-fire" />
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Start</button>
+          </form>
+        </div>
+      </Card>
+    </div>
+
+    <div class="w-full max-w-md">
+      <Card header="Rapid Fire Multiplication" body="Practice multiplication table problems.">
+        <div class="flex w-full justify-end mt-4" slot="actionSlot">
+          <form method="POST">
+            <input type="hidden" name="game" value="multiplication-table" />
             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Start</button>
           </form>
         </div>
