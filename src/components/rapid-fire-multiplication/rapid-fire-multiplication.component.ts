@@ -50,7 +50,7 @@ import { interval, take } from 'rxjs';
       @if (timeLeftS() === 0) {
         <div class="w-full max-w-md bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-6 border border-gray-100 dark:border-neutral-800 transition-all duration-300 text-center">
           <div class="text-3xl font-extrabold text-indigo-700 dark:text-indigo-300 mb-2">Time's up!</div>
-          <div class="text-xl mb-4">Your score: <span class="font-extrabold text-indigo-600 dark:text-indigo-200 animate-bounce">{{score()}}</span></div>
+          <div class="text-xl mb-4">Your score: <span class="font-extrabold text-indigo-600 dark:text-indigo-200 animate-bounce">{{scoreS()}}</span></div>
           <button
             (click)="startGame()"
             class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition-all duration-200 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
